@@ -1,0 +1,216 @@
+/* Variables */
+:root {
+    --section-width: 320px;
+    --section-gutter: 32px;
+    --ball-diameter: 20px;
+    --column-width: 145px;
+    --column-gutter: 5px;
+}
+
+/* CSS reset */
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p,
+blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img,
+ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i,
+center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption,
+tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section,
+summary, time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav,
+section {
+  display: block;
+}
+/* Reset any floats */
+.reset {
+  clear: both;
+}
+/* Style standard elements */
+body {
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+  background: #fff;
+  color: #261412;
+}
+h1, h2, h3, h4 {
+  font-weight: bold;
+  margin-bottom: 0.5em;
+}
+h1 {
+  font-size: 22px;
+}
+h2 {
+  font-size: 18px;
+}
+h3 {
+  font-size: 16px;
+}
+p {
+  margin-bottom: 0.5em;
+}
+em,
+i {
+  font-style: italic;
+}
+strong, b {
+  font-weight: bold;
+}
+code {
+  font-family: courier;
+}
+pre {
+  margin-bottom: 1em;
+  margin-left: 3em;
+  margin-right: 6em;
+  background: #ccc;
+  padding: 0.5em 1em;
+}
+ul, ol {
+  margin-left: 3em;
+  margin-bottom: 0.5em;
+}
+ul > ul, ol > ol, ul > ol, ol > ul {
+  margin-top: 0.2em;
+}
+a {
+  text-decoration: none;
+  color: #592a0e;
+}
+a:hover {
+  color: #cc0000;
+  text-decoration: underline;
+}
+strong {
+    color: #09f;
+    font-weight: normal;
+}
+/* The header area */
+header {
+  background: #f2dfa7;
+  background-size: 80px 35px;
+  background-position: 99% 36px;
+  height: 32px;
+  border-color: #895f1f;
+  border-style: solid;
+  border-width: 0px 0px 1px 0px;
+}
+
+header::before {
+  content: "";
+  display: block;
+  width: 100%;
+  background: #895f1f;
+  height: 24px;
+}
+
+header h1 {
+  position: relative;
+  top: -24px;
+  display: inline-block;
+  margin: 0px 0px 0px 32px;
+  background: #a68f72;
+  color: #fff;
+  padding: 8px 16px;
+  border-color: #592a0e;
+  border-style: solid;
+  border-width: 0px 2px 2px 2px;
+  border-radius: 0px 0px 16px 16px;
+}
+/* The content area */
+div#content {
+  margin: 0 auto;
+  padding: 24px 32px;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+section {
+  width: var(--section-width);
+  margin-bottom: 24px;
+  margin-right: var(--section-gutter);
+  position: relative;
+}
+
+h2 {
+  line-height: 20px;
+  padding-bottom: 4px;
+  color: #592a0e;
+  border-color: #592a0e;
+  border-style: solid;
+  border-width: 0px 0px 2px 0px;
+}
+
+ul {
+  padding: 0px;
+  margin-left: 0px;
+  list-style-type: none;
+  color: #895f1f;
+}
+
+h2::after {
+    content: "";
+    display: inline-block;
+    color: #06c;
+    background: #f2dfa7;
+    height: var(--ball-diameter);
+    width: var(--ball-diameter);
+    text-align: center;
+    border-color: #592a0e;
+    border-style: solid;
+    border-width: 2px;
+    border-radius: 50%;
+    position: absolute;
+    right: 0;
+    top: 12px;
+}
+
+p {
+    font-style: italic;
+    margin-bottom: 0.7em;
+}
+
+ul li {
+  width: var(--column-width);
+  height: 10px;
+  padding: 0px;
+  margin: 0px;
+}
+
+ul li:nth-child(even) {
+    position: relative;
+    left: calc(var(--column-width) + var(--column-gutter));
+    top: -8px;
+}
+
+footer {
+}
+
+/* Tables */
+table {
+  border-collapse: collapse;
+}
+table td, table th {
+  color: #895f1f;
+  padding: 0px 8px;
+}
+table td:first-child, table th:first-child {
+  padding: 0px 8px 0px 0px;
+  font-weight: bold;
+}
+table tbody td {
+}
+table thead {
+}
+table thead th {
+  font-weight: bold;
+}
+table tfoot {
+  font-weight: bold;
+}
+table tfoot td {
+}
