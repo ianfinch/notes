@@ -42,6 +42,8 @@ directories.
 ```
 
 ## Example notes page
+
+```
 <!doctype HTML>
 <html>
     <head>
