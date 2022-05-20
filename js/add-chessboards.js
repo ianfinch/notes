@@ -45,3 +45,39 @@ let boardNumber = 1;
     }
 
 });
+
+/**
+ * Function to update the chessboard in the current section with the FEN passed as a parameter
+ */
+const updateChessboard = (fen, link) => {
+
+    // Find the section this link is in
+    let section = link;
+    while (section.localName && section.localName !== "section") {
+        section = section.parentNode;
+    }
+
+    // Check we found a section
+    if (section.localName && section.localName === "section") {
+
+        // Now find the chessboard
+        const board = section.getElementsByClassName("chessboard")[0];
+        if (board && board.chessboard) {
+            board.chessboard.position(fen);
+        }
+    }
+};
+
+[...document.getElementById("content").getElementsByTagName("a")].forEach(link => {
+
+    const basedir = location.href.replace(/[^\/]*$/, "");
+    const fenString = link.href.replace(basedir, "");
+
+    if (fenString.match(/^fen#/)) {
+
+        const fen = decodeURI(fenString.replace(/^fen#/, ""));
+
+        link.removeAttribute("href");
+        link.addEventListener("click", e => updateChessboard(fen, e.target));
+    }
+});
