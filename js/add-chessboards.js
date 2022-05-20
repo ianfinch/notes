@@ -26,11 +26,15 @@ let boardNumber = 1;
 
         // The content of the pre block is the FEN string
         // ChessboardJs only wants the first part of this
-        const [fen, nextPlayer] = pre.textContent.split(" ");
+        const [fen] = pre.textContent.split(" ");
+
+        // Check whether we need to flip the board
+        const codeBlock = section.getElementsByTagName("code");
+        const nextPlayer = codeBlock[0].classList.contains("black") ? "black" : "white";
 
         // Display the chessboard
         board.chessboard = Chessboard(board.id, {
-            orientation: nextPlayer === "w" ? "black" : "white",
+            orientation: nextPlayer,
             pieceTheme: "../../img/chesspieces/wikipedia/{piece}.png",
             position: fen,
             showNotation: false
