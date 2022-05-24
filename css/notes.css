@@ -129,7 +129,7 @@ div#content {
 /* Each section */
 section {
   background: #fff;
-  width: 700px;
+  max-width: 700px;
   padding: 0.5em 1em;
   margin-right: 1em;
   margin-bottom: 1em;
