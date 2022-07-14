@@ -1,11 +1,9 @@
 /* Variables */
 :root {
-    --section-width: 320px;
-    --section-gutter: 32px;
-    --ball-diameter: 20px;
-    --column-width: 145px;
-    --column-gutter: 5px;
-    --max-columns: 3;
+    --page-width: 210mm;
+    --side-padding: 20mm;
+    --top-padding: 20mm;
+    --bottom-padding: 20mm;
 }
 
 /* CSS reset */
@@ -33,23 +31,28 @@ section {
 }
 /* Style standard elements */
 body {
+  max-width: var(--page-width);
   font-family: 'Roboto', sans-serif;
   font-size: 14px;
-  background: #ffe;
-  color: #261412;
+  background: #fff;
+  color: #000;
+  padding: var(--top-padding) var(--side-padding) var(--bottom-padding) var(--side-padding);
 }
 h1, h2, h3, h4 {
   font-weight: bold;
-  margin-bottom: 0.5em;
+  margin-top: 1.5em;
+  margin-bottom: 0.7em;
 }
 h1 {
-  font-size: 22px;
+  font-size: 28px;
+  text-align: center;
+  margin-bottom: 1.5em;
 }
 h2 {
   font-size: 18px;
 }
 h3 {
-  font-size: 14px;
+  font-size: 16px;
 }
 p {
   margin-bottom: 0.5em;
@@ -87,69 +90,10 @@ a:hover {
   color: #cc0000;
   text-decoration: underline;
 }
-/* The header area */
-header {
-  background: #f2dfa7;
-  background-size: 80px 35px;
-  background-position: 99% 36px;
-  height: 32px;
-  border-color: #895f1f;
-  border-style: solid;
-  border-width: 0px 0px 1px 0px;
-}
 
-header::before {
-  content: "";
-  display: block;
-  width: 100%;
-  background: #895f1f;
-  height: 24px;
-}
-
-header::after {
-    content: "github.com/ianfinch/notes";
-    display: block;
-    position: absolute;
-    top: 2px;
-    right: 16px;
-    font-style: italic;
-    color: goldenrod;
-}
-
-header h1 {
-  position: relative;
-  top: -24px;
-  display: inline-block;
-  margin: 0px 0px 0px 32px;
-  background: #a68f72;
-  color: #fff;
-  padding: 8px 16px;
-  border-color: #592a0e;
-  border-style: solid;
-  border-width: 0px 2px 2px 2px;
-  border-radius: 0px 0px 16px 16px;
-}
 /* The content area */
 div#content {
   padding: 24px 32px;
-  display: flex;
-  flex-wrap: wrap;
-}
-
-/* Each section */
-section {
-  background: #fff;
-  max-width: 700px;
-  padding: 0.5em 1em;
-  margin-right: 1em;
-  margin-bottom: 1em;
-  border: 1px solid black;
-  align-self: flex-start;
-}
-
-/* Highlighted sections */
-section.highlighted {
-    background: yellow;
 }
 
 /* Tables */
@@ -185,20 +129,4 @@ table tfoot {
   border-top: 3px solid #444444;
 }
 table tfoot td {
-}
-
-/* Style any chessboards */
-.contains-chessboard {
-}
-
-.section-content {
-    width: 460px;
-    display: inline-block;
-    vertical-align: top;
-}
-
-.chessboard {
-    width: 240px;
-    display: inline-block;
-    vertical-align: top;
 }
