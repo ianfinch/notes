@@ -191,6 +191,23 @@ table tfoot td {
 .contains-chessboard {
 }
 
+.contains-chessboard table {
+    margin-left: 2em;
+    margin-bottom: 0.5em;
+}
+
+.contains-chessboard table thead {
+    display: none;
+}
+
+.contains-chessboard table tr {
+    background: none;
+}
+
+.contains-chessboard table td {
+    padding: 0px 8px;
+}
+
 .section-content {
     width: 460px;
     display: inline-block;
