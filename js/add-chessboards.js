@@ -114,12 +114,56 @@ const isValidBishopMove = (from, to) => {
 };
 
 /**
+ * Is a move a valid knight move?
+ */
+const isValidKnightMove = (from, to) => {
+
+    const [toFile, toRank] = to.split("");
+    const files = "abcdefgh";
+
+    const currentFileIndex = files.indexOf(toFile);
+    const moves = files.split("").map(file => {
+
+        if (file === toFile) {
+            return null;
+        }
+
+        const delta = Math.abs(files.indexOf(file) - currentFileIndex);
+        if (delta <= 2) {
+            return [file, 3 - delta];
+        }
+
+        return null;
+    }).filter(x => x).map(([file, delta]) => {
+
+        return [
+            file + (toRank - delta),
+            file + (toRank - 0 + delta)
+        ];
+    }).flat();
+
+    if (moves.includes(from)) {
+        return true;
+    }
+
+    return false;
+};
+
+/**
  * Is a move a valid move?
  */
 const isValidMove = (piece, from, to) => {
 
     if (piece === "R") {
         return isValidRookMove(from, to);
+    }
+
+    if (piece === "B") {
+        return isValidBishopMove(from, to);
+    }
+
+    if (piece === "N") {
+        return isValidKnightMove(from, to);
     }
 
     if (piece === "Q") {
@@ -211,6 +255,23 @@ const displayMove = (moveString, chessboard) => {
 
         // And make the move
         chessboard.move(selectedStart + "-" + end);
+
+    // Castling
+    } else if (move === "O-O") {
+
+        if (player === "w") {
+            chessboard.move("e1-g1", "h1-f1");
+        } else {
+            chessboard.move("e8-g8", "h8-f8");
+        }
+
+    } else if (move === "O-O-O") {
+
+        if (player === "w") {
+            chessboard.move("e1-c1", "a1-d1");
+        } else {
+            chessboard.move("e8-c8", "a8-d8");
+        }
     }
 };
 
@@ -279,7 +340,7 @@ const updateChessboard = (moves, link) => {
 
         // Display the chessboard
         board.chessboard = Chessboard(board.id, {
-            moveSpeed: 300,
+            moveSpeed: 500,
             onMoveEnd: triggerMakeMove(board),
             orientation: nextPlayer,
             pieceTheme: "../../img/chesspieces/wikipedia/{piece}.png",
