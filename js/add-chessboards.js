@@ -343,7 +343,7 @@ const updateChessboard = (moves, link) => {
             moveSpeed: 500,
             onMoveEnd: triggerMakeMove(board),
             orientation: nextPlayer,
-            pieceTheme: "../../img/chesspieces/wikipedia/{piece}.png",
+            pieceTheme: "../../lib/img/chesspieces/wikipedia/{piece}.png",
             position: fen,
             showNotation: false
         });
