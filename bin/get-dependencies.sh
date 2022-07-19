@@ -34,10 +34,10 @@ fi
 
 (
     cd $base/lib/fonts
-    $curl -O https://github.com/google/fonts/blob/main/apache/roboto/static/Roboto-Regular.ttf
-    $curl -O https://github.com/google/fonts/blob/main/apache/roboto/static/Roboto-Italic.ttf
-    $curl -O https://github.com/google/fonts/blob/main/apache/roboto/static/Roboto-Bold.ttf
-    $curl -O https://github.com/google/fonts/blob/main/apache/roboto/static/Roboto-BoldItalic.ttf
+    $curl -L "https://github.com/google/fonts/blob/main/apache/roboto/static/Roboto-Regular.ttf?raw=true" > Roboto-Regular.ttf
+    $curl -L "https://github.com/google/fonts/blob/main/apache/roboto/static/Roboto-Italic.ttf?raw=true" > Roboto-Italic.ttf
+    $curl -L "https://github.com/google/fonts/blob/main/apache/roboto/static/Roboto-Bold.ttf?raw=true" > Roboto-Bold.ttf
+    $curl -L "https://github.com/google/fonts/blob/main/apache/roboto/static/Roboto-BoldItalic.ttf?raw=true" > Roboto-BoldItalic.ttf
 )
 
 (

@@ -14,14 +14,14 @@
 
 @font-face {
     font-family: "Roboto";
-    font-style: normal;
+    font-style: italic;
     font-weight: 400;
     src: local("Roboto Italic"), local("Roboto-Italic"), url("../lib/fonts/Roboto-Italic.ttf") format("truetype");
 }
 
 @font-face {
     font-family: "Roboto";
-    font-style: normal;
+    font-style: italic;
     font-weight: 700;
-    src: local("Roboto Bold Italic"), local("Roboto-Bold Italic"), url("../lib/fonts/Roboto-BoldItalic.ttf") format("truetype");
+    src: local("Roboto Bold Italic"), local("Roboto-BoldItalic"), url("../lib/fonts/Roboto-BoldItalic.ttf") format("truetype");
 }
