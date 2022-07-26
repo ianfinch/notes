@@ -1,5 +1,6 @@
 var converter = new showdown.Converter();
 converter.setOption("tables", true);
+converter.setOption("tasklists", true);
 
 let md = document.getElementById("markdown").textContent;
 
