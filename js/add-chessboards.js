@@ -340,6 +340,7 @@ const updateChessboard = (moves, link) => {
 
         // Display the chessboard
         board.chessboard = Chessboard(board.id, {
+            draggable: true,
             moveSpeed: 500,
             onMoveEnd: triggerMakeMove(board),
             orientation: nextPlayer,

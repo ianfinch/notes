@@ -1,0 +1,188 @@
+/* Variables */
+:root {
+    --section-width: 320px;
+    --section-gutter: 32px;
+    --ball-diameter: 20px;
+    --column-width: 145px;
+    --column-gutter: 5px;
+    --max-columns: 3;
+}
+
+/* CSS reset */
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p,
+blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img,
+ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i,
+center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption,
+tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section,
+summary, time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav,
+section {
+  display: block;
+}
+/* Reset any floats */
+.reset {
+  clear: both;
+}
+/* Style standard elements */
+body {
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+  background: #ffe;
+  color: #261412;
+}
+h1, h2, h3, h4 {
+  font-weight: bold;
+  margin-bottom: 0.5em;
+}
+h1 {
+  font-size: 22px;
+}
+h2 {
+  font-size: 18px;
+}
+h3 {
+  font-size: 14px;
+}
+p {
+  margin-bottom: 0.5em;
+}
+em,
+i {
+  font-style: italic;
+}
+strong, b {
+  font-weight: bold;
+}
+code {
+  font-family: courier;
+}
+pre {
+  margin-bottom: 1em;
+  margin-left: 3em;
+  margin-right: 6em;
+  background: #ccc;
+  padding: 0.5em 1em;
+}
+ul, ol {
+  margin-left: 3em;
+  margin-bottom: 0.5em;
+}
+ul > ul, ol > ol, ul > ol, ol > ul {
+  margin-top: 0.2em;
+}
+a {
+  text-decoration: none;
+  color: #0000ff;
+  cursor: pointer;
+}
+a:hover {
+  color: #cc0000;
+  text-decoration: underline;
+}
+/* The header area */
+header {
+  background: #f2dfa7;
+  background-size: 80px 35px;
+  background-position: 99% 36px;
+  height: 32px;
+  border-color: #895f1f;
+  border-style: solid;
+  border-width: 0px 0px 1px 0px;
+}
+
+header::before {
+  content: "";
+  display: block;
+  width: 100%;
+  background: #895f1f;
+  height: 24px;
+}
+
+header::after {
+    content: "github.com/ianfinch/notes";
+    display: block;
+    position: absolute;
+    top: 2px;
+    right: 16px;
+    font-style: italic;
+    color: goldenrod;
+}
+
+header h1 {
+  position: relative;
+  top: -24px;
+  display: inline-block;
+  margin: 0px 0px 0px 32px;
+  background: #a68f72;
+  color: #fff;
+  padding: 8px 16px;
+  border-color: #592a0e;
+  border-style: solid;
+  border-width: 0px 2px 2px 2px;
+  border-radius: 0px 0px 16px 16px;
+}
+/* The content area */
+div#content {
+  padding: 24px 32px;
+}
+
+/* Tables */
+table {
+  border: 1px solid #FFFFFF;
+  border-collapse: collapse;
+}
+table td, table th {
+  border: 1px solid #FFFFFF;
+  padding: 3px 8px;
+}
+table tbody td {
+}
+table tr:nth-child(even) {
+  background: #D0E4F5;
+}
+table thead {
+  background: #0B6FA4;
+  border-bottom: 5px solid #FFFFFF;
+}
+table thead th {
+  font-weight: bold;
+  color: #FFFFFF;
+  border-left: 2px solid #FFFFFF;
+}
+table thead th:first-child {
+  border-left: none;
+}
+
+table tfoot {
+  font-weight: bold;
+  background: #D0E4F5;
+  border-top: 3px solid #444444;
+}
+table tfoot td {
+}
+
+/* Control layout from the main container */
+.contains-chessboard {
+    display: flex;
+    flex-direction: row-reverse;
+    width: 968px;
+}
+
+.contains-chessboard .section-content {
+    width: 360px;
+    margin-left: 8px;
+}
+
+.chessboard {
+    width: 600px;
+    display: inline-block;
+    vertical-align: top;
+}
