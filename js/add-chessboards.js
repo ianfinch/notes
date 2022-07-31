@@ -3,9 +3,7 @@ let boardNumber = 1;
 /**
  * Find a piece on the chessboard
  */
-const findPieces = (piece, chessboard) => {
-
-    const position = chessboard.position();
+const findPieces = (piece, position) => {
 
     return Object.keys(position).reduce((result, square) => {
 
@@ -174,29 +172,13 @@ const isValidMove = (piece, from, to) => {
 };
 
 /**
- * Update chessboard based on a move
+ * Convert a move from notation to start and end square
  */
-const displayMove = (moveString, chessboard) => {
-
-    const [player, move] = moveString.split("#");
-
-    // Check for a FEN
-    if (player === "fen") {
-
-        // If this is the same as the current position, manually trigger
-        // another move
-        if (chessboard.position("fen") === move) {
-            makeMove(chessboard);
-            return;
-        }
-
-        // Otherwise, set the position
-        chessboard.position(move);
+const convertNotation = (player, move, position) => {
 
     // Pawn move
-    } else if (move.match(/^[a-h][1-8]/)) {
+    if (move.match(/^[a-h][1-8]/)) {
 
-        const position = chessboard.position();
         const [file, rankString] = move.split("");
         const rank = rankString - 0;
 
@@ -204,20 +186,22 @@ const displayMove = (moveString, chessboard) => {
 
             // Standard pawn move
             if (position[file + (rank - 1)] === "wP") {
-                chessboard.move(file + (rank - 1) + "-" + move);
+                return file + (rank - 1) + "-" + move;
+            }
 
             // Initial double pawn move
-            } else if (rank === 4 && position[file + (rank - 2)] === "wP") {
-                chessboard.move(file + (rank - 2) + "-" + move);
+            if (rank === 4 && position[file + (rank - 2)] === "wP") {
+                return file + (rank - 2) + "-" + move;
             }
 
         } else {
 
             if (position[file + (rank + 1)] === "bP") {
-                chessboard.move(file + (rank + 1) + "-" + move);
+                return file + (rank + 1) + "-" + move;
+            }
 
-            } else if (rank === 5 && position[file + (rank + 2)] === "bP") {
-                chessboard.move(file + (rank + 2) + "-" + move);
+            if (rank === 5 && position[file + (rank + 2)] === "bP") {
+                return file + (rank + 2) + "-" + move;
             }
 
         }
@@ -229,17 +213,17 @@ const displayMove = (moveString, chessboard) => {
         const rank = rankString - 0;
 
         if (player === "w") {
-            chessboard.move(from + (rank - 1) + "-" + to + rank);
-        } else {
-            chessboard.move(from + (rank + 1) + "-" + to + rank);
+            return from + (rank - 1) + "-" + to + rank;
         }
+
+        return from + (rank + 1) + "-" + to + rank;
 
     // Simple piece moves
     } else if (move.match(/^[KQRBN]x?[a-h][1-8]/)) {
 
         const simplifiedMove = move.replace("x", "");
         const piece = simplifiedMove.substr(0, 1);
-        const start = findPieces(player + piece, chessboard);
+        const start = findPieces(player + piece, position);
         const end = simplifiedMove.substr(1);
 
         // There may be multiple pieces of this type on the board, so
@@ -254,25 +238,57 @@ const displayMove = (moveString, chessboard) => {
         }, null);
 
         // And make the move
-        chessboard.move(selectedStart + "-" + end);
+        return selectedStart + "-" + end;
 
     // Castling
     } else if (move === "O-O") {
 
         if (player === "w") {
-            chessboard.move("e1-g1", "h1-f1");
-        } else {
-            chessboard.move("e8-g8", "h8-f8");
+            return "e1-g1,h1-f1";
         }
+
+        return "e8-g8,h8-f8";
 
     } else if (move === "O-O-O") {
 
         if (player === "w") {
-            chessboard.move("e1-c1", "a1-d1");
-        } else {
-            chessboard.move("e8-c8", "a8-d8");
+            return "e1-c1,a1-d1";
         }
+
+        return "e8-c8,a8-d8";
     }
+
+    return null;
+};
+
+/**
+ * Update chessboard based on a move
+ */
+const displayMove = (moveString, chessboard) => {
+
+    const [player, move] = moveString.split("#");
+    const position = chessboard.position();
+
+    // Check for a FEN
+    if (player === "fen") {
+
+        // If this is the same as the current position, manually trigger
+        // another move
+        if (chessboard.position("fen") === move) {
+            makeMove(chessboard);
+            return;
+        }
+
+        // Otherwise, set the position
+        chessboard.position(move);
+
+    // Otherwise, convert the notation into a move
+    } else {
+
+        //convertNotation(player, move, position).split(",").forEach(moveToMake => chessboard.move(moveToMake));
+        chessboard.move.apply(null, convertNotation(player, move, position).split(","));
+    }
+
 };
 
 /**
@@ -338,11 +354,18 @@ const updateChessboard = (moves, link) => {
         const codeBlock = section.getElementsByTagName("code");
         const nextPlayer = codeBlock[0].classList.contains("black") ? "black" : "white";
 
+        // Set the move end handler
+        board.moveEndHandler = triggerMakeMove(board);
+
+        // Set the drop handler
+        board.dropHandler = () => null;
+
         // Display the chessboard
         board.chessboard = Chessboard(board.id, {
             draggable: true,
             moveSpeed: 500,
-            onMoveEnd: triggerMakeMove(board),
+            onDrop: (a, b, c, d, e, f) => { return board.dropHandler(a, b, c, d, e, f); },
+            onMoveEnd: () => { board.moveEndHandler(); },
             orientation: nextPlayer,
             pieceTheme: "../../lib/img/chesspieces/wikipedia/{piece}.png",
             position: fen,
