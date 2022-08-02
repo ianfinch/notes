@@ -184,14 +184,14 @@ p {
     margin-bottom: 0.7em;
 }
 
-ul li {
+ul.twocolumn li {
   width: var(--column-width);
   height: 10px;
   padding: 0px;
   margin: 0px;
 }
 
-ul li:nth-child(even) {
+ul.twocolumn li:nth-child(even) {
     position: relative;
     left: calc(var(--column-width) + var(--column-gutter));
     top: -8px;
