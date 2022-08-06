@@ -1,0 +1,138 @@
+* {
+    box-sizing: border-box;
+}
+
+#content {
+
+    display: block !important;
+}
+
+nav {
+    text-align: right;
+}
+
+nav span.separator {
+
+    margin-left: 1em;
+    margin-right: 1em;
+}
+
+.calendar {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    background: #dedede;
+}
+
+.name-of-day, .day, .blank {
+    background: white;
+    border-color: #dedede;
+    border-style: solid;
+    border-width: 1px;
+    padding: 2px;
+}
+
+.day {
+    position: relative;
+    line-height: 24px;
+    height: 8em;
+}
+
+.day > div.day-number {
+
+    position: absolute;
+    width: 24px;
+    top: 0;
+    right: 0;
+    text-align: right;
+    font-weight: bold;
+}
+
+.day > div {
+    line-height: 18px;
+    padding: 2px 4px;
+    margin-bottom: 1px;
+}
+
+.day > div:nth-child(2) {
+    width: calc(100% - 24px);
+}
+
+.day.weekend, .day.holiday {
+    background: #ffe7ff;
+}
+
+.day > div.all-day {
+    background: dodgerblue;
+    color: white;
+}
+
+.day > div.has-start-time::before {
+
+    content: ">";
+    text-align: center;
+    font-weight: bold;
+    display: inline-block;
+    background: dodgerblue;
+    color: dodgerblue;
+    height: 16px;
+    width: 16px;
+    border-radius: 50%;
+    margin-right: 4px;
+}
+
+.day > div.annual {
+    background: royalblue;
+    color: white;
+}
+
+.day > div.label {
+    display: inline-block;
+    width: inherit;
+    background: darkorange;
+    color: white;
+    padding: 2px 8px;
+    border-radius: 10px;
+}
+
+.day.holiday > div.label {
+    background: purple;
+}
+
+.name-of-day {
+    text-align: center;
+    font-weight: bold;
+    background: peru;
+    color: white;
+}
+
+.name-of-day.weekend {
+    background: saddlebrown;
+}
+
+.day.today {
+    background: #ffffa5;
+}
+
+.day.month-starts-on-tue {
+    grid-column: 2;
+}
+
+.day.month-starts-on-wed {
+    grid-column: 3;
+}
+
+.day.month-starts-on-thu {
+    grid-column: 4;
+}
+
+.day.month-starts-on-fri {
+    grid-column: 5;
+}
+
+.day.month-starts-on-sat {
+    grid-column: 6;
+}
+
+.day.month-starts-on-sun {
+    grid-column: 7;
+}
