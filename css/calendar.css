@@ -41,20 +41,18 @@ nav span.separator {
 
     position: absolute;
     width: 24px;
+    height: 24px;
     top: 0;
     right: 0;
     text-align: right;
     font-weight: bold;
+    background: inherit;
 }
 
 .day > div {
     line-height: 18px;
     padding: 2px 4px;
-    margin-bottom: 1px;
-}
-
-.day > div:nth-child(2) {
-    width: calc(100% - 24px);
+    margin-bottom: 2px;
 }
 
 .day.weekend, .day.holiday {
