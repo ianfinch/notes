@@ -113,7 +113,7 @@ const addDays = calendar => {
             day.classList.add("weekend");
         }
 
-        if (label === today.getDay() && thisMonth === today.getMonth() && thisYear === today.getYear() + 1900) {
+        if (label === today.getDate() && thisMonth === today.getMonth() && thisYear === today.getYear() + 1900) {
             day.classList.add("today");
         }
 
