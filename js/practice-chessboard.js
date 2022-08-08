@@ -87,9 +87,9 @@ const analyseMove = move => {
 const findMoveTree = () => {
 
     const moves = document.getElementsByTagName("ul")[0];
-    const result = simplifyDomList(moves);
+    const variations = simplifyDomList(moves);
     moves.style.display = "none";
-    return result;
+    return [{ variations }];
 };
 
 /**
@@ -223,7 +223,7 @@ const opponentPlays = (player, moveTree, position) => {
     const convertedMove = convertNotation(player, nextMove[player], position);
     const chessboard = document.getElementsByClassName("chessboard")[0].chessboard;
     chessboard.move(convertedMove);
-addMoveToNotes(player, nextMove);
+    addMoveToNotes(player, nextMove);
 
     return removeMove(moveTree, player);
 };
@@ -247,16 +247,30 @@ const pieceMovedHandler = moveTree => {
 
         // Now try to find a next move for the player - it will be at the top of
         // the move tree
-        const nextMove = moveTree[0];
+        let nextMove = moveTree[0];
         if (Array.isArray(nextMove)) {
             alert("Next move is an array");
             return "snapback";
         }
 
-        // Check that the tree contains a next move for us
+        // If there is no move for this player, see if we have variations to
+        // choose from
         if (!nextMove[player]) {
-            alert("Next move not defined for player " + player);
-            return "snapback";
+
+            if (nextMove.variations) {
+
+                // Pick a random variation
+                const selectedMove = Math.floor(Math.random() * nextMove.variations.length);
+                nextMove = nextMove.variations[selectedMove];
+
+                // Also use this line as the new move tree
+                moveTree = [ nextMove ];
+
+            } else {
+
+                alert("Next move not defined for player " + player);
+                return "snapback";
+            }
         }
 
         // Check the move made against the next move from our tree - first we
@@ -276,7 +290,8 @@ const pieceMovedHandler = moveTree => {
             return "snapback";
         }
 
-addMoveToNotes(player, nextMove);
+        // Can update our notes now, since we know the move will happen
+        addMoveToNotes(player, nextMove);
 
         // If there are additional moves (e.g. moving the rook for castling)
         // then make those moves happen (with a delay to make them happen
@@ -308,5 +323,35 @@ addMoveToNotes(player, nextMove);
     };
 };
 
-document.getElementsByClassName("chessboard")[0].moveEndHandler = () => null;
-document.getElementsByClassName("chessboard")[0].dropHandler = pieceMovedHandler(findMoveTree());
+/**
+ * Initialise everything
+ */
+const init = () => {
+
+    const moveTree = findMoveTree();
+    const chessboardDiv = document.getElementsByClassName("chessboard")[0];
+
+    // We don't need the move end handler for this practice capability
+    chessboardDiv.moveEndHandler = () => null;
+
+    // If we are playing as white, set up the handler for white's initial move
+    if (chessboardDiv.chessboard.orientation() === "white") {
+
+        chessboardDiv.dropHandler = pieceMovedHandler(moveTree);
+
+    // If we are playing as black, pick one of white's possible moves to start
+    } else {
+
+        const initialBoard = {
+            a1: "wR", b1: "wN", c1: "wB", d1: "wQ", e1: "wK", f1: "wB", g1: "wN", h1: "wR",
+            a2: "wP", b2: "wP", c2: "wP", d2: "wP", e2: "wP", f2: "wP", g2: "wP", h2: "wP",
+            a7: "bP", b7: "bP", c7: "bP", d7: "bP", e7: "bP", f7: "bP", g7: "bP", h7: "bP",
+            a8: "bR", b8: "bN", c8: "bB", d8: "bQ", e8: "bK", f8: "bB", g8: "bN", h8: "bR"
+        };
+
+        const afterOpponentsMove = opponentPlays("w", moveTree, initialBoard);
+        chessboardDiv.dropHandler = pieceMovedHandler(afterOpponentsMove);
+    }
+};
+
+init();

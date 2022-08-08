@@ -176,6 +176,9 @@ const isValidMove = (piece, from, to) => {
  */
 const convertNotation = (player, move, position) => {
 
+    // If the move has a check indicator, remove that for this analysis
+    move = move.replace(/[+#]$/, "");
+
     // Pawn move
     if (move.match(/^[a-h][1-8]/)) {
 
