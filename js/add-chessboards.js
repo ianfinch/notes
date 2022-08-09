@@ -222,16 +222,28 @@ const convertNotation = (player, move, position) => {
         return from + (rank + 1) + "-" + to + rank;
 
     // Simple piece moves
-    } else if (move.match(/^[KQRBN]x?[a-h][1-8]/)) {
+    } else if (move.match(/^[KQRBN][a-h]?x?[a-h][1-8]/)) {
 
         const simplifiedMove = move.replace("x", "");
         const piece = simplifiedMove.substr(0, 1);
         const start = findPieces(player + piece, position);
-        const end = simplifiedMove.substr(1);
+        const end = simplifiedMove.substr(-2);
+        const startHint = simplifiedMove.length === 3 ? null : simplifiedMove.substr(1, 1);
 
         // There may be multiple pieces of this type on the board, so
-        // find which one can make the legal move
-        const selectedStart = start.reduce((result, possibleStart) => {
+        // find the one which can make the legal move.  First, if there is a
+        // starting file specified, filter down to matching options, then
+        // examine all pieces of this type and see which ones could move to
+        // this finishing position
+        const selectedStart = start.filter(possibleStart => {
+
+            if (!startHint) {
+                return possibleStart;
+            }
+
+            return possibleStart.substr(0, 1) === startHint;
+
+        }).reduce((result, possibleStart) => {
 
             if (isValidMove(piece, possibleStart, end)) {
                 return possibleStart;

@@ -318,7 +318,11 @@ const pieceMovedHandler = moveTree => {
 
             // Update the drop handler with the new move tree resulting from the
             // opponent's next move
-            document.getElementsByClassName("chessboard")[0].dropHandler = pieceMovedHandler(afterOpponentsMove);
+            if (afterOpponentsMove === null) {
+                document.getElementsByClassName("chessboard")[0].dropHandler = () => null;
+            } else {
+                document.getElementsByClassName("chessboard")[0].dropHandler = pieceMovedHandler(afterOpponentsMove);
+            }
         }, 100);
     };
 };
@@ -350,7 +354,11 @@ const init = () => {
         };
 
         const afterOpponentsMove = opponentPlays("w", moveTree, initialBoard);
-        chessboardDiv.dropHandler = pieceMovedHandler(afterOpponentsMove);
+        if (afterOpponentsMove.length === 0) {
+            addLine("Variation complete");
+        } else {
+            chessboardDiv.dropHandler = pieceMovedHandler(afterOpponentsMove);
+        }
     }
 };
 
