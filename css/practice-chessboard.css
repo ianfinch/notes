@@ -181,6 +181,23 @@ table tfoot td {
     margin-left: 8px;
 }
 
+.contains-chessboard .section-content section > div {
+    margin-bottom: 2px;
+}
+
+.contains-chessboard .section-content section > button {
+    cursor: pointer;
+    background: dodgerblue;
+    color: white;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    padding: 4px 8px;
+}
+
+.contains-chessboard .section-content section > button:hover {
+    background: royalblue;
+}
+
 .chessboard {
     width: 600px;
     display: inline-block;

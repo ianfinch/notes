@@ -33,6 +33,12 @@ const simplifyDomList = root => {
             }
         });
 
+        // Generate an ID to link the DOM node with the element in the data
+        // structure
+        const id = "" + Math.round(Math.random() * 100000000);
+        item.id = id;
+        child.id = id;
+
         return item;
     });
 
@@ -84,7 +90,7 @@ const analyseMove = move => {
 /**
  * Find the first <ul> ... </ul> on the page
  */
-const findMoveTree = () => {
+const findMoveTree = debug => {
 
     const moves = document.getElementsByTagName("ul")[0];
     const variations = simplifyDomList(moves);
@@ -196,15 +202,121 @@ const addMoveToNotes = (player, move) => {
 };
 
 /**
+ * Create a "play again" button
+ */
+const playAgainButton = () => {
+
+    const button = document.createElement("button");
+    button.textContent = "play again";
+
+    // When the button is clicked, start a new line
+    button.addEventListener("click", e => {
+
+        // Clear the previous commentary
+        const section = document.getElementsByTagName("section")[0];
+        [...section.children].forEach(elem => {
+
+            if (elem.nodeName === "DIV" || elem.nodeName === "BUTTON") {
+
+                section.removeChild(elem);
+            }
+        });
+
+        // Start the new game
+        init();
+    });
+
+    return button;
+};
+
+/**
+ * Add a play again button to the bottom of the notes section
+ */
+const addPlayAgainButton = () => {
+
+    const notes = document.getElementsByTagName("section")[0];
+    notes.appendChild(playAgainButton());
+};
+
+/**
+ * Remove a game from the move tree in the DOM
+ */
+const pruneMoveTree = movesPlayed => {
+
+    // Work back from the leaf nodes, pruning the tree.  This means that as we
+    // remove leaf nodes, we can check whether that causes their parent nodes
+    // to become leaves and we can remove them too.
+    [...movesPlayed].reverse().forEach(elemId => {
+
+        const elem = document.getElementById(elemId);
+
+        // See whether this element is followed by another list item
+        let siblingListItem = elem.nextSibling;
+        while (siblingListItem && siblingListItem.nodeName !== "LI" && siblingListItem.nextSibling) {
+            siblingListItem = siblingListItem.nextSibling;
+        }
+
+        // We could end up with some whitespace text node, which we're not
+        // interested in
+        if (siblingListItem && siblingListItem.nodeName === "#text") {
+            siblingListItem = null;
+        }
+
+        // The sibling needs to be a higher-numbered move than the current one,
+        // so we check for that and disregard any siblings with the same move
+        // number
+        if (siblingListItem) {
+
+            const currentMoveNumber = elem.firstChild.textContent.split(".")[0];
+            const siblingMoveNumber = siblingListItem.firstChild.textContent.split(".")[0];
+            if (currentMoveNumber === siblingMoveNumber) {
+                siblingListItem = null;
+            }
+        }
+
+        // Remove the node if it has no sub-lists of moves, and no next moves
+        // at the same level.  This may leave us with an empty list at the
+        // level above, so we need to check for that and remove the
+        // encompassing list if that's the case.
+        if (elem.childElementCount === 0 && siblingListItem === null) {
+
+            const ul = elem.parentNode;
+            ul.removeChild(elem);
+
+            if (ul.childElementCount === 0) {
+                ul.parentNode.removeChild(ul);
+            }
+        }
+    });
+
+};
+
+/**
+ * Do end of game housekeeping
+ */
+const endOfGame = movesPlayed => {
+
+    addLine("Variation complete");
+    pruneMoveTree(movesPlayed);
+
+    if ([...document.getElementsByTagName("ul")].length === 0) {
+        addLine("All variations completed");
+    } else {
+        addPlayAgainButton();
+    }
+};
+
+/**
  * Find the next moves from a move tree and play one of them
  */
-const opponentPlays = (player, moveTree, position) => {
+const opponentPlays = (player, moveTree, position, movesPlayed) => {
 
     let nextMove = moveTree[0];
 
     // If no move is available, we have reached the end of this play
     if (!nextMove || (!nextMove[player] && !nextMove.variations)) {
-        addLine("Variation complete");
+
+        endOfGame(movesPlayed);
         return null;
     }
 
@@ -225,7 +337,15 @@ const opponentPlays = (player, moveTree, position) => {
     chessboard.move(convertedMove);
     addMoveToNotes(player, nextMove);
 
-    return removeMove(moveTree, player);
+    // Keep track of moves we've played
+    if (movesPlayed[movesPlayed.length - 1] !== nextMove.id) {
+        movesPlayed =  movesPlayed.concat([ nextMove.id ]);
+    }
+
+    return {
+        moveTree: removeMove(moveTree, player),
+        movesPlayed
+    };
 };
 
 /**
@@ -233,7 +353,9 @@ const opponentPlays = (player, moveTree, position) => {
  * response to it.  We pass the move tree into this function to get our actual
  * handler, with the move tree in the enclosure.
  */
-const pieceMovedHandler = moveTree => {
+const pieceMovedHandler = (moveTree, movesPlayed) => {
+
+    const chessboardDiv = document.getElementsByClassName("chessboard")[0];
 
     return (oldLocation, newLocation, piece, newBoard, oldBoard, orientation) => {
 
@@ -299,7 +421,7 @@ const pieceMovedHandler = moveTree => {
         if (multiMove[1]) {
 
             setTimeout(() => {
-                document.getElementsByClassName("chessboard")[0].chessboard.move(multiMove[1]);
+                chessboardDiv.chessboard.move(multiMove[1]);
             }, 100);
         }
 
@@ -308,20 +430,25 @@ const pieceMovedHandler = moveTree => {
         // move tree.
         const nextMoveTree = removeMove(moveTree, player);
 
+        // Also want to keep track of which moves were played
+        if (movesPlayed[movesPlayed.length - 1] !== nextMove.id) {
+            movesPlayed =  movesPlayed.concat([ nextMove.id ]);
+        }
+
         // Let the other player make their move - delay this slightly, so that
-        // this onDrop handler has time to complete before the next move
-        // happens
+        // this onDrop handler has time to complete its board update before the
+        // next move happens (otherwise the board update gets into a race)
         setTimeout(() => {
 
             // Run the opponent's move
-            const afterOpponentsMove = opponentPlays(player === "w" ? "b" : "w", nextMoveTree, newBoard);
+            const afterOpponentsMove = opponentPlays(player === "w" ? "b" : "w", nextMoveTree, newBoard, movesPlayed);
 
             // Update the drop handler with the new move tree resulting from the
             // opponent's next move
             if (afterOpponentsMove === null) {
-                document.getElementsByClassName("chessboard")[0].dropHandler = () => null;
+                chessboardDiv.dropHandler = () => null;
             } else {
-                document.getElementsByClassName("chessboard")[0].dropHandler = pieceMovedHandler(afterOpponentsMove);
+                chessboardDiv.dropHandler = pieceMovedHandler(afterOpponentsMove.moveTree, afterOpponentsMove.movesPlayed);
             }
         }, 100);
     };
@@ -338,10 +465,13 @@ const init = () => {
     // We don't need the move end handler for this practice capability
     chessboardDiv.moveEndHandler = () => null;
 
+    // Put the chessboard in the starting position
+    chessboardDiv.chessboard.position("start");
+
     // If we are playing as white, set up the handler for white's initial move
     if (chessboardDiv.chessboard.orientation() === "white") {
 
-        chessboardDiv.dropHandler = pieceMovedHandler(moveTree);
+        chessboardDiv.dropHandler = pieceMovedHandler(moveTree, []);
 
     // If we are playing as black, pick one of white's possible moves to start
     } else {
@@ -353,11 +483,11 @@ const init = () => {
             a8: "bR", b8: "bN", c8: "bB", d8: "bQ", e8: "bK", f8: "bB", g8: "bN", h8: "bR"
         };
 
-        const afterOpponentsMove = opponentPlays("w", moveTree, initialBoard);
-        if (afterOpponentsMove.length === 0) {
-            addLine("Variation complete");
+        const whiteMove = opponentPlays("w", moveTree, initialBoard, []);
+        if (whiteMove.moveTree.length === 0) {
+            endOfGame(whiteMove.movesPlayed);
         } else {
-            chessboardDiv.dropHandler = pieceMovedHandler(afterOpponentsMove);
+            chessboardDiv.dropHandler = pieceMovedHandler(whiteMove.moveTree, whiteMove.movesPlayed);
         }
     }
 };
