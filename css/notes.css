@@ -144,7 +144,7 @@ section {
   margin-right: 1em;
   margin-bottom: 1em;
   border: 1px solid black;
-  align-self: flex-start;
+  align-self: stretch;
 }
 
 /* Highlighted sections */

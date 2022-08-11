@@ -313,7 +313,7 @@ const opponentPlays = (player, moveTree, position, movesPlayed) => {
 
     let nextMove = moveTree[0];
 
-    // If no move is available, we have reached the end of this play
+    // Check we've still got a move to play
     if (!nextMove || (!nextMove[player] && !nextMove.variations)) {
 
         endOfGame(movesPlayed);
@@ -442,11 +442,12 @@ const pieceMovedHandler = (moveTree, movesPlayed) => {
 
             // Run the opponent's move
             const afterOpponentsMove = opponentPlays(player === "w" ? "b" : "w", nextMoveTree, newBoard, movesPlayed);
-
             // Update the drop handler with the new move tree resulting from the
             // opponent's next move
             if (afterOpponentsMove === null) {
                 chessboardDiv.dropHandler = () => null;
+            } else if (afterOpponentsMove.moveTree.length === 0) {
+                endOfGame(afterOpponentsMove.movesPlayed);
             } else {
                 chessboardDiv.dropHandler = pieceMovedHandler(afterOpponentsMove.moveTree, afterOpponentsMove.movesPlayed);
             }
