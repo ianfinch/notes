@@ -334,7 +334,7 @@ const opponentPlays = (player, moveTree, position, movesPlayed) => {
     // Play the specified move
     const convertedMove = convertNotation(player, nextMove[player], position);
     const chessboard = document.getElementsByClassName("chessboard")[0].chessboard;
-    chessboard.move(convertedMove);
+    chessboard.move.apply(null, convertedMove.split(","));
     addMoveToNotes(player, nextMove);
 
     // Keep track of moves we've played
