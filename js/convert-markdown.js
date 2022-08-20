@@ -47,3 +47,57 @@ document.getElementById("markdown").style.display = "none";
         }
     }
 });
+
+/**
+ * Remove the inline styling showdown puts in checkboxes
+ */
+[...document.getElementsByTagName("input")].forEach(elem => {
+
+    elem.style.removeProperty("margin-bottom");
+    elem.style.removeProperty("margin-left");
+    elem.style.removeProperty("margin-right");
+    elem.style.removeProperty("margin-top");
+});
+
+/**
+ * Enable two columns within bookmark sections (called from pages where two
+ * column is wanted
+ */
+const twocolumn = () => {
+
+    [...document.getElementsByTagName("ul")].forEach(ul => {
+    
+        // We don't want to put "to do" lists into two columns
+        if (ul.getElementsByTagName("input").length === 0) {
+
+            // Set two column using a class
+            ul.classList.add("twocolumn");
+        }
+    });
+};
+
+/**
+ * Add in icons to bookmark sections
+ */
+[...document.getElementsByClassName("bookmarks")].forEach(section => {
+
+    [...section.getElementsByTagName("h2")].forEach(h2 => {
+
+        let icon;
+        if (h2.getElementsByTagName("em").length === 0) {
+
+            icon = "link";
+
+        } else {
+
+            const em = h2.getElementsByTagName("em")[0];
+            icon = em.textContent;
+            h2.removeChild(em);
+        }
+
+        const i = document.createElement("i");
+        i.classList.add("las");
+        i.classList.add("la-" + icon);
+        h2.appendChild(i);
+    });
+});

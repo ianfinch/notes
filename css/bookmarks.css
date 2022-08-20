@@ -2,12 +2,18 @@
 :root {
     --section-width: 320px;
     --section-gutter: 32px;
-    --ball-diameter: 20px;
+    --icon-size: 24px;
+    --ball-diameter: 30px;
+    --ball-border: 2px;
+    --ball-padding: 2px;
     --column-width: 145px;
     --column-gutter: 5px;
 }
 
 /* CSS reset */
+* {
+    box-sizing: border-box;
+}
 html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p,
 blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img,
 ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i,
@@ -137,6 +143,9 @@ div#content {
   padding: 24px 32px;
   display: flex;
   flex-wrap: wrap;
+  flex-direction: column;
+  height: calc(100vh - 100px);
+  align-content: flex-start;
 }
 
 section {
@@ -162,21 +171,35 @@ ul {
   color: #895f1f;
 }
 
-h2::after {
-    content: "";
+h2 i {
     display: inline-block;
+    font-size: var(--icon-size);
+    font-style: normal;
     color: #06c;
     background: #f2dfa7;
-    height: var(--ball-diameter);
-    width: var(--ball-diameter);
+    height: calc(var(--ball-diameter) + var(--ball-border));
+    width: calc(var(--ball-diameter) + var(--ball-border));
+    padding-top: var(--ball-padding);
     text-align: center;
     border-color: #592a0e;
     border-style: solid;
-    border-width: 2px;
+    border-width: var(--ball-border);
     border-radius: 50%;
     position: absolute;
     right: 0;
-    top: 12px;
+    top: 9px;
+}
+
+h2::before {
+    content: "";
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    background: #592a0e;
+    border-radius: 4px;
+    position: absolute;
+    left: 0;
+    top: 21px;
 }
 
 p {
