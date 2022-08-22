@@ -21,6 +21,10 @@ if [[ ! -e "$base/lib/js" ]] ; then
     mkdir $base/lib/js
 fi
 
+if [[ ! -e "$base/lib/css" ]] ; then
+    mkdir $base/lib/css
+fi
+
 if [[ ! -e "$base/lib/fonts" ]] ; then
     mkdir $base/lib/fonts
 fi
@@ -38,6 +42,12 @@ fi
     $curl -L "https://github.com/google/fonts/blob/main/apache/roboto/static/Roboto-Italic.ttf?raw=true" > Roboto-Italic.ttf
     $curl -L "https://github.com/google/fonts/blob/main/apache/roboto/static/Roboto-Bold.ttf?raw=true" > Roboto-Bold.ttf
     $curl -L "https://github.com/google/fonts/blob/main/apache/roboto/static/Roboto-BoldItalic.ttf?raw=true" > Roboto-BoldItalic.ttf
+
+    $curl -L "https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/line-awesome-1.3.0.zip" > line-awesome.zip
+    unzip -q line-awesome.zip
+    mv ./1.3.0/css/line-awesome.min.css ../css/
+    mv ./1.3.0/fonts/la-*.woff* ./
+    rm -rf ./line-awesome.zip ./1.3.0
 )
 
 (
