@@ -49,14 +49,31 @@ document.getElementById("markdown").style.display = "none";
 });
 
 /**
- * Remove the inline styling showdown puts in checkboxes
+ * Modify the default input boxes that showdown creates
  */
 [...document.getElementsByTagName("input")].forEach(elem => {
 
-    elem.style.removeProperty("margin-bottom");
-    elem.style.removeProperty("margin-left");
-    elem.style.removeProperty("margin-right");
-    elem.style.removeProperty("margin-top");
+    if (elem.type === "checkbox") {
+
+        // Remove the inline style that showdown adds
+        elem.style.removeProperty("margin-bottom");
+        elem.style.removeProperty("margin-left");
+        elem.style.removeProperty("margin-right");
+        elem.style.removeProperty("margin-top");
+
+        // Wrap the text in a <span> ... </span> for easier styling
+        const parent = elem.parentNode;
+        [...parent.childNodes].forEach(child => {
+
+            if (child.nodeName === "#text") {
+
+                const span = document.createElement("span");
+                span.textContent = child.textContent;
+                parent.removeChild(child);
+                parent.appendChild(span);
+            }
+        });
+    }
 });
 
 /**

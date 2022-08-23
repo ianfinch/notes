@@ -1,14 +1,17 @@
 /* Variables */
 :root {
     --section-width: 320px;
-    --section-gutter: 32px;
-    --ball-diameter: 20px;
+    --section-gutter: 48px;
+    --icon-size: 24px;
+    --ball-diameter: 30px;
+    --ball-border: 2px;
+    --ball-padding: 2px;
     --column-width: 145px;
     --column-gutter: 5px;
-    --max-columns: 3;
 }
 
 /* CSS reset */
+* { box-sizing: border-box; }
 html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p,
 blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img,
 ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i,
@@ -49,7 +52,7 @@ h2 {
   font-size: 18px;
 }
 h3 {
-  font-size: 14px;
+  font-size: 16px;
 }
 p {
   margin-bottom: 0.5em;
@@ -131,25 +134,32 @@ header h1 {
 }
 /* The content area */
 div#content {
+  margin: 0 auto;
   padding: 24px 32px;
   display: flex;
   flex-wrap: wrap;
+  align-content: flex-start;
 }
 
 /* Each section */
-section {
+#content:not(.bookmarks) section {
   background: #fff;
-  max-width: 700px;
+  max-width: 740px;
   padding: 0.5em 1em;
   margin-right: 1em;
   margin-bottom: 1em;
   border: 1px solid black;
-  align-self: stretch;
 }
 
 /* Highlighted sections */
-section.highlighted {
-    background: yellow;
+#content:not(.bookmarks) section.highlighted {
+    background: #ffffa5;
+}
+
+/* If there's a bullet list directly after the heading, don't indent it */
+h2 + ul {
+    margin-left: 0;
+    list-style: inside;
 }
 
 /* Tables */
@@ -218,4 +228,139 @@ table tfoot td {
     width: 240px;
     display: inline-block;
     vertical-align: top;
+}
+
+#content.bookmarks {
+  flex-direction: column;
+  height: calc(100vh - 100px);
+}
+
+.bookmarks a {
+  color: #592a0e;
+}
+
+.bookmarks strong {
+    color: dodgerblue;
+}
+
+.bookmarks section {
+  width: var(--section-width);
+  margin-bottom: 24px;
+  margin-right: var(--section-gutter);
+  position: relative;
+}
+
+.bookmarks h2 {
+  line-height: 20px;
+  padding-bottom: 4px;
+  color: #592a0e;
+  border-color: #592a0e;
+  border-style: solid;
+  border-width: 0px 0px 2px 0px;
+}
+
+.bookmarks ul {
+  padding: 0px;
+  margin-left: 0px;
+  list-style-type: none;
+  color: #895f1f;
+}
+
+.bookmarks h2 i {
+    display: inline-block;
+    font-size: var(--icon-size);
+    font-style: normal;
+    color: #06c;
+    background: #f2dfa7;
+    height: calc(var(--ball-diameter) + var(--ball-border));
+    width: calc(var(--ball-diameter) + var(--ball-border));
+    padding-top: var(--ball-padding);
+    text-align: center;
+    border-color: #592a0e;
+    border-style: solid;
+    border-width: var(--ball-border);
+    border-radius: 50%;
+    position: absolute;
+    right: 0;
+    top: 9px;
+}
+
+.bookmarks h2::before {
+    content: "";
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    background: #592a0e;
+    border-radius: 4px;
+    position: absolute;
+    left: 0;
+    top: 21px;
+}
+
+.bookmarks p {
+    font-style: italic;
+    margin-bottom: 0.7em;
+}
+
+.bookmarks ul.twocolumn li {
+  width: var(--column-width);
+  height: 10px;
+  padding: 0px;
+  margin: 0px;
+}
+
+.bookmarks ul.twocolumn li:nth-child(even) {
+    position: relative;
+    left: calc(var(--column-width) + var(--column-gutter));
+    top: -8px;
+}
+
+footer {
+}
+
+/* Tables */
+.bookmarks table {
+  border-collapse: collapse;
+}
+.bookmarks table tr {
+    background: none;
+}
+
+.bookmarks table td, .bookmarks table th {
+  color: #895f1f;
+  padding: 0px 8px;
+}
+.bookmarks table td:first-child, .bookmarks table th:first-child {
+  padding: 0px 8px 0px 0px;
+  font-weight: bold;
+}
+.bookmarks table tbody td {
+}
+.bookmarks table thead {
+}
+.bookmarks table thead th {
+  font-weight: bold;
+}
+.bookmarks table tfoot {
+  font-weight: bold;
+}
+.bookmarks table tfoot td {
+}
+
+/* Checkboxes */
+.bookmarks input[type="checkbox"] {
+    appearance: none;
+    position: absolute;
+}
+.bookmarks input[type="checkbox"] + span {
+    display: block;
+    font-size: 14px;
+    line-height: 20px;
+}
+.bookmarks input[type="checkbox"]:checked + span {
+    text-decoration: line-through;
+    color: #bfbfbf;
+}
+.bookmarks input[type="checkbox"]:not(:checked) + span {
+    color: #592a0e;
 }
