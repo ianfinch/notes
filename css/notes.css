@@ -136,13 +136,26 @@ header h1 {
 div#content {
   margin: 0 auto;
   padding: 24px 32px;
+}
+
+/* Wrap panels */
+div#content.panels {
   display: flex;
   flex-wrap: wrap;
   align-content: flex-start;
 }
 
-/* Each section */
-#content:not(.bookmarks) section {
+/* We want to wrap bookmarks vertically */
+div#content.bookmarks {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  flex-direction: column;
+  height: calc(100vh - 100px);
+}
+
+/* Panel-based sections */
+#content.panels section {
   background: #fff;
   max-width: 740px;
   padding: 0.5em 1em;
@@ -152,7 +165,7 @@ div#content {
 }
 
 /* Highlighted sections */
-#content:not(.bookmarks) section.highlighted {
+#content.panels section.highlighted {
     background: #ffffa5;
 }
 
@@ -228,11 +241,6 @@ table tfoot td {
     width: 240px;
     display: inline-block;
     vertical-align: top;
-}
-
-#content.bookmarks {
-  flex-direction: column;
-  height: calc(100vh - 100px);
 }
 
 .bookmarks a {
@@ -363,4 +371,86 @@ footer {
 }
 .bookmarks input[type="checkbox"]:not(:checked) + span {
     color: #592a0e;
+}
+
+/* Spreadsheet-style table formatting */
+.spreadsheet table {
+    border-collapse: collapse;
+    margin-bottom: 32px;
+    margin-right: 32px;
+}
+
+.spreadsheet thead {
+    background: none;
+    border-bottom: none;
+}
+
+.spreadsheet tr:nth-child(even) {
+    background: none;
+}
+
+.spreadsheet th {
+    font-size: 12px;
+    color: #44546a;
+    font-weight: bold;
+    border-bottom: 3px solid #9bc2e6;
+    vertical-align: middle;
+}
+
+.spreadsheet tr:first-child th:first-child {
+    font-size: 20px;
+    border-bottom: 3px solid #2f75b5;
+}
+
+.spreadsheet th[colspan] {
+    font-size: 14px;
+    border-bottom: solid #9bc2e6 3px;
+    border-right: double #000 3px;
+}
+
+.spreadsheet th[colspan]:last-child {
+    font-size: 14px;
+    border-bottom: solid #9bc2e6 3px;
+    border-right: none;
+}
+
+.spreadsheet td {
+    font-size: 12px;
+    background: #ffcc99;
+    color: #3f3f76;
+    border-color: #3f3f76;
+}
+
+.spreadsheet td:first-child {
+    background: #ffffcc;
+    color: #000;
+    border-color: #3f3f76;
+}
+
+.spreadsheet th.end-of-group, .spreadsheet td.end-of-group {
+    border-right: double #000 3px;
+}
+
+.spreadsheet th.end-of-group:last-child {
+    border-right: none;
+}
+
+.spreadsheet td.end-of-group:last-child {
+    border-right: solid 1px #3f3f76;
+}
+
+.spreadsheet td.calculation {
+    background: #f2f2f2;
+    color: #fa7d00;
+    font-weight: bold;
+}
+
+.spreadsheet td.good {
+    background: #c6efce;
+    color: #006100;
+}
+
+.spreadsheet td.bad {
+    background: #ffc7ce;
+    color: #9c0006;
 }
