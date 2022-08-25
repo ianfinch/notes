@@ -393,7 +393,7 @@ footer {
     font-size: 12px;
     color: #44546a;
     font-weight: bold;
-    border-bottom: 3px solid #9bc2e6;
+    border-bottom: 3px solid #2f75b5;
     vertical-align: middle;
 }
 
@@ -404,13 +404,10 @@ footer {
 
 .spreadsheet th[colspan] {
     font-size: 14px;
-    border-bottom: solid #9bc2e6 3px;
     border-right: double #000 3px;
 }
 
 .spreadsheet th[colspan]:last-child {
-    font-size: 14px;
-    border-bottom: solid #9bc2e6 3px;
     border-right: none;
 }
 
