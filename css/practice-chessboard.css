@@ -203,3 +203,11 @@ table tfoot td {
     display: inline-block;
     vertical-align: top;
 }
+
+.chessboard-blue .white-1e1d7 {
+    background-color: aliceblue;
+}
+
+.chessboard-blue .black-3c85d {
+    background-color: lightseagreen;
+}
