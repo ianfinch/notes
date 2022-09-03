@@ -339,8 +339,9 @@ const updateChessboard = (moves, link) => {
  */
 [...document.getElementById("content").getElementsByTagName("pre")].forEach(pre => {
 
-    // Only want the anonymous pre tags we've added
-    if (!pre.id) {
+    // We don't want the <pre> ... </pre> blocks which include our markdown, so
+    // filter them out
+    if (!pre.style.display || pre.style.display !== "none") {
 
         // Create a div for the board
         const board = document.createElement("div");

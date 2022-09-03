@@ -39,7 +39,7 @@ const convertMarkdown = mdElem => {
 /**
  * Actually do the markdown conversion
  */
-convertMarkdown(document.getElementById("markdown"));
+[...document.getElementsByClassName("markdown")].forEach(convertMarkdown);
 
 /**
  * Add a 'highlighted' class to any section which has a <strong> tag inside its
