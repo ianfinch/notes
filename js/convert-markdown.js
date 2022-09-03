@@ -2,35 +2,44 @@ var converter = new showdown.Converter();
 converter.setOption("tables", true);
 converter.setOption("tasklists", true);
 
-let md = document.getElementById("markdown").textContent;
-
 /**
- * If an object 'vars' is defined, use that to perform variable substitution
- * for patterns of the form {% ... %} within the markdown
+ * Function to perform markdown conversion to HTML
+ *
+ * Given an element which contains the text to be converted, perform the
+ * conversion, add the HTML into the document, and hide the original text
  */
-if (window.vars) {
+const convertMarkdown = mdElem => {
 
-    Object.keys(window.vars).forEach(key => {
+    // We want the content of the passed in DOM element
+    let md = mdElem.textContent;
 
-        const regex = new RegExp("{% *" + key + " *%}", "g");
-        md = md.replace(regex, window.vars[key]);
-    });
+    // If an object 'vars' is defined, use that to perform variable substitution
+    // for patterns of the form {% ... %} within the markdown
+    if (window.vars) {
 
+        Object.keys(window.vars).forEach(key => {
+
+            const regex = new RegExp("{% *" + key + " *%}", "g");
+            md = md.replace(regex, window.vars[key]);
+        });
+    
+    }
+
+    // Actually do the markdown to HTML conversion, wrapping <h2> headers in
+    // sections
+    var html = converter.makeHtml(md)
+                .replaceAll("<h2 ", "</section><h2 ")
+                .replaceAll("<h2 ", "<section><h2 ");
+
+    // Add the generated HTML to the page and hide the markdown
+    mdElem.insertAdjacentHTML("beforebegin", html);
+    mdElem.style.display = "none";
 }
 
 /**
- * Actually do the markdown to HTML conversion, wrapping <h2> headers in
- * sections
+ * Actually do the markdown conversion
  */
-var html = converter.makeHtml(md)
-            .replaceAll("<h2 ", "</section><h2 ")
-            .replaceAll("<h2 ", "<section><h2 ");
-
-/**
- * Add the generated HTML to the page and hide the markdown
- */
-document.getElementById("content").insertAdjacentHTML("afterbegin", html);
-document.getElementById("markdown").style.display = "none";
+convertMarkdown(document.getElementById("markdown"));
 
 /**
  * Add a 'highlighted' class to any section which has a <strong> tag inside its
@@ -77,24 +86,7 @@ document.getElementById("markdown").style.display = "none";
 });
 
 /**
- * Enable two columns within bookmark sections (called from pages where two
- * column is wanted
- */
-const twocolumn = () => {
-
-    [...document.getElementsByTagName("ul")].forEach(ul => {
-    
-        // We don't want to put "to do" lists into two columns
-        if (ul.getElementsByTagName("input").length === 0) {
-
-            // Set two column using a class
-            ul.classList.add("twocolumn");
-        }
-    });
-};
-
-/**
- * Add in icons to bookmark sections
+ * Add icons to bookmark sections
  */
 [...document.getElementsByClassName("bookmarks")].forEach(section => {
 
@@ -118,3 +110,20 @@ const twocolumn = () => {
         h2.appendChild(i);
     });
 });
+
+/**
+ * Function which can be added to the HTML file to enable two columns within
+ * bookmark sections
+ */
+const twocolumn = () => {
+
+    [...document.getElementsByTagName("ul")].forEach(ul => {
+    
+        // We don't want to put "to do" lists into two columns
+        if (ul.getElementsByTagName("input").length === 0) {
+
+            // Set two column using a class
+            ul.classList.add("twocolumn");
+        }
+    });
+};
