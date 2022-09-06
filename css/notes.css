@@ -278,6 +278,10 @@ table tfoot td {
   border-width: 0px 0px 2px 0px;
 }
 
+.bookmarks h3 {
+  color: #592a0e;
+}
+
 .bookmarks ul {
   padding: 0px;
   margin-left: 0px;
@@ -367,9 +371,25 @@ footer {
 }
 
 /* Checkboxes */
+li.task-list-item {
+    padding-left: 1.5em;
+}
+
 .bookmarks input[type="checkbox"] {
     appearance: none;
     position: absolute;
+    width: 0;
+}
+.bookmarks input[type="checkbox"] + span::before {
+    content: "\f141";
+    position: absolute;
+    left: 0;
+    font-family: "Line Awesome Free";
+    font-weight: 900;
+    font-size: 16px;
+}
+.bookmarks input[type="checkbox"]:checked + span::before {
+    content: "\f14a";
 }
 .bookmarks input[type="checkbox"] + span {
     display: block;
@@ -378,7 +398,7 @@ footer {
 }
 .bookmarks input[type="checkbox"]:checked + span {
     text-decoration: line-through;
-    color: #bfbfbf;
+    color: mediumseagreen;
 }
 .bookmarks input[type="checkbox"]:not(:checked) + span {
     color: #592a0e;
