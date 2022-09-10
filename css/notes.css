@@ -389,7 +389,7 @@ li.task-list-item {
     font-size: 16px;
 }
 .bookmarks input[type="checkbox"]:checked + span::before {
-    content: "\f14a";
+    content: "\f00c";
 }
 .bookmarks input[type="checkbox"] + span {
     display: block;
