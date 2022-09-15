@@ -62,14 +62,39 @@ const clearPendingMoves = () => {
 /**
  * Is a move a valid rook move?
  */
-const isValidRookMove = (from, to) => {
+const isValidRookMove = (from, to, position) => {
 
-    if (from.substr(0, 1) === to.substr(0, 1) ||
-        from.substr(1) === to.substr(1)) {
+    // Check same column
+    if (from.substr(0, 1) === to.substr(0, 1)) {
 
         return true;
     }
 
+    // Check same row
+    if (from.substr(1) === to.substr(1)) {
+
+        const firstFile = from.substr(0, 1) < to.substr(0, 1) ? from.substr(0, 1) : to.substr(0, 1);
+        const lastFile = from.substr(0, 1) > to.substr(0, 1) ? from.substr(0, 1) : to.substr(0, 1);
+
+        const blockingPieces = [ "a", "b", "c", "d", "e", "f", "g", "h" ].map(file => {
+
+            if (file <= firstFile || file >= lastFile) {
+                return null;
+            }
+
+            return position[file + from.substr(1)];
+        }).filter(x => x);
+
+        // If there are pieces in the way, we can't move this piece
+        if (blockingPieces.length !== 0) {
+            return false;
+        }
+
+        // If we get here, everything is okay
+        return true;
+    }
+
+    // No available move
     return false;
 };
 
@@ -150,10 +175,10 @@ const isValidKnightMove = (from, to) => {
 /**
  * Is a move a valid move?
  */
-const isValidMove = (piece, from, to) => {
+const isValidMove = (piece, from, to, position) => {
 
     if (piece === "R") {
-        return isValidRookMove(from, to);
+        return isValidRookMove(from, to, position);
     }
 
     if (piece === "B") {
@@ -165,7 +190,7 @@ const isValidMove = (piece, from, to) => {
     }
 
     if (piece === "Q") {
-        return isValidRookMove(from, to) || isValidBishopMove(from, to);
+        return isValidRookMove(from, to, position) || isValidBishopMove(from, to);
     }
 
     return false;
@@ -245,7 +270,7 @@ const convertNotation = (player, move, position) => {
 
         }).reduce((result, possibleStart) => {
 
-            if (isValidMove(piece, possibleStart, end)) {
+            if (isValidMove(piece, possibleStart, end, position)) {
                 return possibleStart;
             }
 
@@ -376,6 +401,16 @@ const updateChessboard = (moves, link) => {
         // Set the drop handler
         board.dropHandler = () => null;
 
+        // Find where our chess pieces are
+        const cssBase = [...document.styleSheets].map(css => {
+
+            if (css.href.match(/\/chessboard-[^/]*\.min\.css/)) {
+                return css.href;
+            }
+
+            return null;
+        }).filter(x => x)[0].replace(/\/css\/[^/]*/, "");
+
         // Display the chessboard
         board.chessboard = Chessboard(board.id, {
             draggable: true,
@@ -383,7 +418,7 @@ const updateChessboard = (moves, link) => {
             onDrop: (a, b, c, d, e, f) => { return board.dropHandler(a, b, c, d, e, f); },
             onMoveEnd: () => { board.moveEndHandler(); },
             orientation: nextPlayer,
-            pieceTheme: "../../lib/img/chesspieces/wikipedia/{piece}.png",
+            pieceTheme: cssBase + "/img/chesspieces/wikipedia/{piece}.png",
             position: fen,
             showNotation: false
         });
