@@ -135,6 +135,7 @@ div#content {
 }
 
 /* Tables */
+/*
 table {
   border: 1px solid #FFFFFF;
   border-collapse: collapse;
@@ -167,6 +168,23 @@ table tfoot {
   border-top: 3px solid #444444;
 }
 table tfoot td {
+}
+*/
+
+/* We may add a 'tags' section from a PGN under the header, so make space for that */
+div.tags {
+    margin-left: 32px;
+    margin-top: 24px;
+}
+
+/* Trim the space for the headings in the PGN tags */
+div.tags h2, div.tags.h3 {
+    margin-bottom: 2px;
+}
+
+/* After the PGN tags, we don't need so much space before our main content */
+div.tags + #content {
+    padding-top: 8px;
 }
 
 /* Control layout from the main container */
@@ -202,6 +220,76 @@ table tfoot td {
     width: 600px;
     display: inline-block;
     vertical-align: top;
+}
+
+/* Style our moves table */
+table.moves {
+    border-collapse: collapse;
+    background: #dddfff;
+}
+
+table.moves tr:nth-child(even) {
+    background: #ffffff60;
+}
+
+table.moves th {
+    padding: 4px 8px 4px 4px;
+    background: #0000ff20;
+}
+
+table.moves td {
+    padding: 4px 32px 4px 8px;
+    cursor: pointer;
+}
+
+table.moves td:hover {
+    background: #006699;
+    color: white;
+}
+
+table.moves td.current-move:hover {
+    background: #006699;
+    color: white;
+}
+
+table.moves th {
+    text-align: right;
+    font-weight: bold;
+}
+
+table.moves td.current-move {
+    background: #006699;
+    color: white;
+}
+
+div.move-controls {
+    display: inline-block;
+    margin-top: 8px;
+}
+
+div.move-controls button {
+    cursor: pointer;
+    background: dodgerblue;
+    color: white;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    padding: 4px 8px;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    margin-right: 4px;
+}
+
+div.move-controls button:last-child {
+    margin-right: 0;
+}
+
+div.move-controls button:hover {
+    background: royalblue;
+}
+
+div.move-controls button i {
+    font-size: 24px;
 }
 
 .chessboard-blue .white-1e1d7 {

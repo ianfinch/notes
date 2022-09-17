@@ -58,3 +58,13 @@ fi
     rm ./css/chessboard-1.0.0.css
     rm ./js/chessboard-1.0.0.js
 )
+
+(
+    cd $base/lib
+    git clone https://github.com/mliebelt/pgn-parser.git
+    cd ./pgn-parser
+    npm install
+    cd $base/lib
+    cp ./pgn-parser/lib/index.umd.js ./pgn-parser.js
+    rm -rf ./pgn-parser
+)

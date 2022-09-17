@@ -173,6 +173,34 @@ const isValidKnightMove = (from, to) => {
 };
 
 /**
+ * Is a move a valid King move?
+ */
+const isValidKingMove = (from, to) => {
+
+    const [fromFile, fromRank] = from.split("");
+    const [toFile, toRank] = to.split("");
+
+    // Check king has moved
+    if (fromFile === toFile && fromRank === toRank) {
+        return false;
+    }
+
+    // King can only move one square ... check rank first
+    if (Math.abs(fromRank - toRank) > 1) {
+        return false;
+    }
+
+    // Check file next
+    const files = "abcdefgh";
+    if (Math.abs(files.indexOf(fromFile) - files.indexOf(toFile)) > 1) {
+        return false;
+    }
+
+    // Everything is okay
+    return true;
+};
+
+/**
  * Is a move a valid move?
  */
 const isValidMove = (piece, from, to, position) => {
@@ -191,6 +219,10 @@ const isValidMove = (piece, from, to, position) => {
 
     if (piece === "Q") {
         return isValidRookMove(from, to, position) || isValidBishopMove(from, to);
+    }
+
+    if (piece === "K") {
+        return isValidKingMove(from, to);
     }
 
     return false;
