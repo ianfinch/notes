@@ -262,6 +262,18 @@ table.moves td.current-move {
     color: white;
 }
 
+table.moves th:nth-child(1) {
+    width: 2em;
+}
+
+table.moves td:nth-child(2) {
+    width: 3em;
+}
+
+table.moves td.comment-area {
+    background: lightblue;
+}
+
 div.move-controls {
     display: inline-block;
     margin-top: 8px;

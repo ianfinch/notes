@@ -147,6 +147,47 @@ const updateBoard = (fens, move, player) => {
 };
 
 /**
+ * Display comments associated with the current move
+ */
+const displayComments = (comments, move, player) => {
+
+    const commentElem = document.getElementsByClassName("comment-area")[0];
+    const commentArea = commentElem.parentNode;
+
+    // If we have a comment, display it
+    if (comments.comment) {
+
+        // Set the text to be the comment text
+        commentElem.textContent = comments.comment;
+
+        // Attach the comment area after the current move
+        document.getElementById(move + player).parentNode.insertAdjacentElement("afterend", commentArea);
+
+        // Display the comment
+        if (commentArea.style.display === "none") {
+            commentArea.style.removeProperty("display");
+        }
+
+    // If there are no comments, hide the comment area
+    } else {
+
+        // Clear the text area
+        if (commentElem.textContent) {
+            commentElem.textContent = "";
+        }
+
+        // Hide it
+        if (commentArea.style.display !== "none") {
+            commentArea.style.display = "none";
+        }
+
+        // Move it to the end of the table, to avoid messing up the alternating
+        // row colours
+        commentArea.parentNode.appendChild(commentArea);
+    }
+};
+
+/**
  * Create a representation of the moves from a PGN
  */
 const pgnMoves = (orientation, moves) => {
@@ -193,11 +234,21 @@ const pgnMoves = (orientation, moves) => {
         // Make the cell clickable
         td.addEventListener("click", () => {
             updateBoard(fens, move.moveNumber, move.turn);
+            displayComments(move.commentDiag, move.moveNumber, move.turn);
         });
 
         return result;
 
     }, table);
+
+    // Create an element for the comments
+    const commentContainer = document.createElement("tr");
+    const commentArea = document.createElement("td");
+    commentArea.setAttribute("colspan", "3");
+    commentArea.classList.add("comment-area");
+    commentContainer.appendChild(commentArea);
+    table.appendChild(commentContainer);
+    commentContainer.style.display = "none";
 
     return result;
 };
@@ -230,6 +281,15 @@ const pgnTable = (orientation, pgnString) => {
 };
 
 /**
+ * Reset the board back to the start position
+ */
+const resetBoard = () => {
+
+    const chessboardDiv = document.getElementsByClassName("chessboard")[0];
+    chessboardDiv.chessboard.position("start");
+    clearCurrentMove();
+};
+/**
  * Advance the move by the specified increment
  */
 const stepMoveBy = increment => {
@@ -243,11 +303,17 @@ const stepMoveBy = increment => {
         // Find the current move
         const currentMove = [...document.getElementsByClassName("current-move")][0];
 
-        // If we have no current move, go to the first move
+        // If we have no current move and we are going forwards, go to the first move
         if (!currentMove) {
-            if (moves[0]) {
+
+            if (increment > 0 && moves[0]) {
                 moves[0].click();
             }
+
+        // If we are on the first move and going backwards, set starting position
+        } else if (currentMove.id === "1w" && increment < 0) {
+
+            resetBoard();
 
         // Otherwise, work out what the next move is
         } else {
@@ -295,12 +361,7 @@ const controlBlock = () => {
     div.appendChild(toStart);
 
     // The start button goes back to the initial position
-    toStart.addEventListener("click", () => {
-
-        const chessboardDiv = document.getElementsByClassName("chessboard")[0];
-        chessboardDiv.chessboard.position("start");
-        clearCurrentMove();
-    });
+    toStart.addEventListener("click", resetBoard);
 
     const stepBack = document.createElement("button");
     const stepBackGlyph = document.createElement("i");
