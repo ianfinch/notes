@@ -410,9 +410,18 @@ const updateChessboard = (moves, link) => {
         const section = pre.parentElement;
         const column = document.createElement("div");
         column.classList.add("section-content");
-        [...section.childNodes].forEach(child => {
-            column.appendChild(child);
-        });
+
+        // Move display elements across to the new DIV
+        [...section.childNodes]
+            .filter(x => x.nodeName !== "PRE")
+            .forEach(child => column.appendChild(child));
+
+        // Add the <pre> ... </pre> blocks to the end
+        [...section.childNodes]
+            .filter(x => x.nodeName === "PRE")
+            .forEach(child => column.appendChild(child));
+
+        // Add the new DIV to the section
         section.appendChild(column);
 
         // Add the board to the page
@@ -458,7 +467,6 @@ const updateChessboard = (moves, link) => {
         // Hide the pre block
         pre.style.display = "none";
     }
-
 });
 
 /**
