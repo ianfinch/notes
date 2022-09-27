@@ -74,10 +74,13 @@ pre {
   background: #ccc;
   padding: 0.5em 1em;
 }
+
 ul, ol {
   margin-left: 3em;
   margin-bottom: 0.5em;
+  position: relative;
 }
+
 ul > ul, ol > ol, ul > ol, ol > ul {
   margin-top: 0.2em;
 }
@@ -170,7 +173,7 @@ div#content.bookmarks {
 }
 
 /* If there's a bullet list directly after the heading, don't indent it */
-h2 + ul {
+h2 + ul, h3 + ul, h4 + ul {
     margin-left: 0;
     list-style: inside;
 }
@@ -384,12 +387,12 @@ li.task-list-item {
     padding-left: 1.5em;
 }
 
-.bookmarks input[type="checkbox"] {
+li.task-list-item input[type="checkbox"] {
     appearance: none;
     position: absolute;
     width: 0;
 }
-.bookmarks input[type="checkbox"] + span::before {
+li.task-list-item input[type="checkbox"] + span::before {
     content: "\f141";
     position: absolute;
     left: 0;
@@ -397,15 +400,15 @@ li.task-list-item {
     font-weight: 900;
     font-size: 16px;
 }
-.bookmarks input[type="checkbox"]:checked + span::before {
+li.task-list-item input[type="checkbox"]:checked + span::before {
     content: "\f00c";
 }
-.bookmarks input[type="checkbox"] + span {
+li.task-list-item input[type="checkbox"] + span {
     display: block;
     font-size: 14px;
     line-height: 20px;
 }
-.bookmarks input[type="checkbox"]:checked + span {
+li.task-list-item input[type="checkbox"]:checked + span {
     text-decoration: line-through;
     color: mediumseagreen;
 }

@@ -63,6 +63,7 @@ const analyseMove = move => {
             b: parts[2],
             comment: parts[3]
         };
+
         return result;
     }
 
@@ -74,6 +75,7 @@ const analyseMove = move => {
             w: parts[1],
             comment: parts[3]
         };
+
         return result;
     }
 
@@ -84,6 +86,7 @@ const analyseMove = move => {
         b: parts[2],
         comment: parts[3]
     };
+
     return result;
 };
 
