@@ -106,13 +106,11 @@ header::before {
   height: 24px;
 }
 
-header::after {
-    content: "github.com/ianfinch/notes";
+header .nav {
     display: block;
     position: absolute;
     top: 2px;
     right: 16px;
-    font-style: italic;
     color: goldenrod;
 }
 
