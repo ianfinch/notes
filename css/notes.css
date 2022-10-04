@@ -9,6 +9,8 @@
     --default-header-border-bg: #592a0e;
     --default-header-accent-bg: #f2dfa7;
     --default-header-accent-fg: #592a0e;
+    --default-header-link-fg: goldenrod;
+    --default-header-link-hover: yellow;
     --default-icon-bg: #f2dfa7;
     --default-icon-fg: #06c;
     --default-icon-border-bg: #592a0e;
@@ -129,12 +131,20 @@ header::before {
   height: 24px;
 }
 
-header .nav {
+header nav {
     display: block;
     position: absolute;
     top: 2px;
     right: 16px;
-    color: goldenrod;
+    color: var( --header-link-fg, var( --default-header-link-fg ) );
+}
+
+header nav a {
+    color: var( --header-link-fg, var( --default-header-link-fg ) );
+}
+
+header nav a:hover {
+    color: var( --header-link-hover, var( --default-header-link-hover ) );
 }
 
 header h1 {
@@ -183,8 +193,13 @@ div#content.bookmarks {
 }
 
 /* Highlighted sections */
-#content.panels section.highlighted {
+#content section.highlighted {
     background: #ffffa5;
+}
+
+/* Content containing text notes */
+#content.text-notes section {
+    max-width: 800px;
 }
 
 /* If there's a bullet list directly after the heading, don't indent it */
