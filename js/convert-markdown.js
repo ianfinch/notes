@@ -114,16 +114,57 @@ const convertMarkdown = mdElem => {
 /**
  * Function which can be added to the HTML file to enable two columns within
  * bookmark sections
+ *
+ * Accepts two parameters ... an array of headings to 'include' (to make two
+ * columns) and an array of headings to 'exclude' (not to make two columns).
+ * These are wrapped in an object.  Each element in the array is a regular
+ * expression.
+ *
+ * If there is no 'include' array passed, then all items are included (apart
+ * from those in the 'exclude' array).
+ *
+ * The include array is applied first, then the exclude array.  So the include
+ * array can limit which headings are set as two columns, and the exclude array
+ * can make some within that list back to one column again.
  */
-const twocolumn = () => {
+const twocolumn = ({ include, exclude } = {}) => {
 
+    // If we don't have an include list, include everything
+    if (!include) {
+        include = [ ".*" ];
+    } else if (include.length === 0) {
+        include.push(".*");
+    }
+
+    // Go through each list
     [...document.getElementsByTagName("ul")].forEach(ul => {
-    
-        // We don't want to put "to do" lists into two columns
-        if (ul.getElementsByTagName("input").length === 0) {
 
-            // Set two column using a class
-            ul.classList.add("twocolumn");
+        // Find the title
+        const h2 = ul.parentNode.children[0];
+        if (h2.nodeName === "H2") {
+
+            // Check that the heading is in our include list
+            const isIncluded = include.filter(regexString => {
+
+                const regex = RegExp(regexString);
+                return regex.test(h2.textContent);
+            }).length;
+
+            if (isIncluded) {
+
+                // Now check for exclusions
+                const isExcluded = exclude.filter(regexString => {
+
+                    const regex = RegExp(regexString);
+                    return regex.test(h2.textContent);
+                }).length;
+
+                if (!isExcluded) {
+
+                    // Set two column using a class
+                    ul.classList.add("twocolumn");
+                }
+            }
         }
     });
 };

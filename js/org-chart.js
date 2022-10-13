@@ -27,14 +27,32 @@
     elem.prepend(detailsDiv);
 });
 
+/**
+ * Wrap a list with an "org" class
+ */
+const wrapList = (elem, parentNode) => {
+
+    const wrapperDiv = document.createElement("div");
+    wrapperDiv.classList.add("org");
+    parentNode.insertBefore(wrapperDiv, elem);
+    wrapperDiv.appendChild(elem);
+};
+
 // Wrap the top-level lists in a DIV
 [...document.getElementById("content").childNodes].forEach(elem => {
 
     if (elem.nodeName === "UL") {
-
-        const wrapperDiv = document.createElement("div");
-        wrapperDiv.classList.add("org");
-        document.getElementById("content").insertBefore(wrapperDiv, elem);
-        wrapperDiv.appendChild(elem);
+        wrapList(elem, document.getElementById("content"));
     }
+});
+
+// Lists may also be in a section
+[...document.getElementsByTagName("section")].forEach(section => {
+
+    [...section.childNodes].forEach(elem => {
+
+        if (elem.nodeName === "UL") {
+            wrapList(elem, section);
+        }
+    });
 });
