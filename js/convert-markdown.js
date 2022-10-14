@@ -136,6 +136,11 @@ const twocolumn = ({ include, exclude } = {}) => {
         include.push(".*");
     }
 
+    // If we don't have an exclude list, don't exclude anything
+    if (!exclude) {
+        exclude = [];
+    }
+
     // Go through each list
     [...document.getElementsByTagName("ul")].forEach(ul => {
 
