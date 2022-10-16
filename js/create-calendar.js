@@ -128,7 +128,9 @@ const addAppointments = () => {
 
     [...document.getElementsByTagName("li")].forEach(appt => {
 
-        const matches = appt.textContent.match(/([0-9]+)\/([0-9]+)\/([0-9*]+) +(.+)/);
+        const matches = appt.innerHTML
+                            .replace(/^<p>/, "").replace(/<\/p>$/, "")
+                            .match(/([0-9]+)\/([0-9]+)\/([0-9*]+) +(.+)/);
         if (matches) {
 
             // Break down the appointment data
@@ -145,13 +147,13 @@ const addAppointments = () => {
 
                 // Create a container for this entry and add it to the cell
                 const elem = document.createElement("div");
-                elem.textContent = entry;
+                elem.innerHTML = entry;
                 dayCell.appendChild(elem);
 
                 // If the entry is a tag, add the appropriate class
                 if (entry.substr(0, 1) === "#") {
                     elem.classList.add("label");
-                    elem.textContent = entry.substr(1);
+                    elem.innerHTML = entry.substr(1);
 
                     // If the tag is for a holiday, add a class to the cell
                     // too, so we can style it appropriately
@@ -175,7 +177,6 @@ const addAppointments = () => {
                 }
             }
         }
-
     });
 
     document.getElementsByTagName("ul")[0].style.display = "none";
