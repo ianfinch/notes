@@ -6,6 +6,8 @@
     --default-pre-bg: #ccc;
     --default-header-bg: #592a0e;
     --default-header-fg: #fff;
+    --default-header-title-bg: #f2dfa7;
+    --default-header-title-fg: #592a0e;
     --default-header-border-bg: #592a0e;
     --default-header-accent-bg: #f2dfa7;
     --default-header-accent-fg: #592a0e;
@@ -152,8 +154,8 @@ header h1 {
   top: -24px;
   display: inline-block;
   margin: 0px 0px 0px 32px;
-  background: var( --header-accent-bg, var( --default-header-accent-bg ) );
-  color: var( --header-accent-fg, var( --default-header-accent-fg ) );
+  background: var( --header-title-bg, var( --default-header-title-bg ) );
+  color: var( --header-title-fg, var( --default-header-title-fg ) );
   padding: 8px 16px;
   border-color: var( --header-border-bg, var( --default-header-border-bg ) );
   border-style: solid;

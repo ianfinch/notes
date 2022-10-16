@@ -92,6 +92,14 @@ nav span.separator {
     border-radius: 10px;
 }
 
+.day a {
+    color: darkslateblue;
+}
+
+.day a:hover {
+    color: #cc0000;
+}
+
 .day.holiday > div.label {
     background: purple;
 }
