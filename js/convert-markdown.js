@@ -42,6 +42,48 @@ const convertMarkdown = mdElem => {
 [...document.getElementsByClassName("markdown")].forEach(convertMarkdown);
 
 /**
+ * If there's an <h1> ... </h1> in the content, pull it up into the header and
+ * the title.  If there is more than one, just grab the first
+ */
+const headersInContent = document.getElementById("content").getElementsByTagName("h1");
+if (headersInContent && headersInContent.length > 0) {
+    
+    // First find our top level heading in the content
+    const h1 = [...headersInContent][0];
+    if (h1) {
+
+        // Now look for an <h1> ... </h1> in the header
+        const header = [...document.getElementsByTagName("header")][0];
+        if (header) {
+
+            [...header.children].forEach(elem => {
+
+                // If we find one, replace it with the one from the content
+                if (elem.nodeName === "H1") {
+
+                    header.removeChild(elem);
+                    header.appendChild(h1);
+
+                }
+            });
+
+        // If there's no header, add one in
+        } else {
+
+            const header = document.createElement("header");
+            header.appendChild(h1);
+            [...document.getElementsByTagName("body")][0].insertAdjacentElement("afterbegin", header);
+        }
+
+        // Update the title too
+        const title = document.getElementsByTagName("title")[0];
+        if (title) {
+            title.textContent = h1.textContent;
+        }
+    }
+}
+
+/**
  * Add a 'highlighted' class to any section which has a <strong> tag inside its
  * <h2> tag (i.e. is ## __something__ in the markdown)
  */
