@@ -17,6 +17,8 @@
     --default-icon-fg: #06c;
     --default-icon-border-bg: #592a0e;
     --default-panel-bg: #fff;
+    --default-status-done: mediumseagreen;
+    --default-status-pending: darkorange;
 }
 
 /* Variables */
@@ -425,7 +427,7 @@ li.task-list-item input[type="checkbox"] {
     width: 0;
 }
 li.task-list-item input[type="checkbox"] + span::before {
-    content: "\f141";
+    content: "\f04d";
     position: absolute;
     left: 0;
     font-family: "Line Awesome Free";
@@ -443,9 +445,10 @@ li.task-list-item input[type="checkbox"] + span {
 li.task-list-item input[type="checkbox"]:checked + span {
     text-decoration: line-through;
     color: mediumseagreen;
+    color: var( --status-done, var( --default-status-done ) );
 }
 .bookmarks input[type="checkbox"]:not(:checked) + span {
-    color: var( --body-fg, var( --default-body-fg ) );
+    color: var( --status-pending, var( --default-status-pending ) );
 }
 
 /* Spreadsheet-style table formatting */
