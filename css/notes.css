@@ -17,8 +17,10 @@
     --default-icon-fg: #06c;
     --default-icon-border-bg: #592a0e;
     --default-panel-bg: #fff;
-    --default-status-done: mediumseagreen;
-    --default-status-pending: darkorange;
+    --default-success-bg: #c6efce;
+    --default-success-fg: #006100;
+    --default-failure-bg: #ffc7ce;
+    --default-failure-fg:#9c0006;
 }
 
 /* Variables */
@@ -419,6 +421,7 @@ footer {
 /* Checkboxes */
 li.task-list-item {
     padding-left: 1.5em;
+    margin-right: calc(var(--ball-diameter) + var(--ball-border));
 }
 
 li.task-list-item input[type="checkbox"] {
@@ -427,15 +430,19 @@ li.task-list-item input[type="checkbox"] {
     width: 0;
 }
 li.task-list-item input[type="checkbox"] + span::before {
+    width: 1.4em;
+    text-align: center;
     content: "\f04d";
     position: absolute;
     left: 0;
     font-family: "Line Awesome Free";
     font-weight: 900;
     font-size: 16px;
+    background: var( --failure-bg, var( --default-failure-bg ) );
 }
 li.task-list-item input[type="checkbox"]:checked + span::before {
     content: "\f00c";
+    background: var( --success-bg, var( --default-success-bg ) );
 }
 li.task-list-item input[type="checkbox"] + span {
     display: block;
@@ -444,11 +451,12 @@ li.task-list-item input[type="checkbox"] + span {
 }
 li.task-list-item input[type="checkbox"]:checked + span {
     text-decoration: line-through;
-    color: mediumseagreen;
-    color: var( --status-done, var( --default-status-done ) );
+    color: var( --success-fg, var( --default-success-fg ) );
+    background: var( --success-bg, var( --default-success-bg ) );
 }
 .bookmarks input[type="checkbox"]:not(:checked) + span {
-    color: var( --status-pending, var( --default-status-pending ) );
+    color: var( --failure-fg, var( --default-failure-fg ) );
+    background: var( --failure-bg, var( --default-failure-bg ) );
 }
 
 /* Spreadsheet-style table formatting */
@@ -521,11 +529,11 @@ li.task-list-item input[type="checkbox"]:checked + span {
 }
 
 .spreadsheet td.good {
-    background: #c6efce;
-    color: #006100;
+    background: var( --success-bg, var( --default-success-bg ) );
+    color: var( --success-fg, var( --default-success-fg ) );
 }
 
 .spreadsheet td.bad {
-    background: #ffc7ce;
-    color: #9c0006;
+    background: var( --failure-bg, var( --default-failure-bg ) );
+    color: var( --failure-fg, var( --default-failure-fg ) );
 }
