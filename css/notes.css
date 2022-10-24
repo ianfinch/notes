@@ -454,7 +454,7 @@ li.task-list-item input[type="checkbox"]:checked + span {
     color: var( --success-fg, var( --default-success-fg ) );
     background: var( --success-bg, var( --default-success-bg ) );
 }
-.bookmarks input[type="checkbox"]:not(:checked) + span {
+li.task-list-item input[type="checkbox"]:not(:checked) + span {
     color: var( --failure-fg, var( --default-failure-fg ) );
     background: var( --failure-bg, var( --default-failure-bg ) );
 }
