@@ -100,6 +100,20 @@ if (headersInContent && headersInContent.length > 0) {
 });
 
 /**
+ * Mark up task items which are waiting for someone else to do something
+ *
+ * My convention is that if the task begins with letters and a colon, that
+ * indicates it is someone's name and I am waiting for them to complete this
+ * task
+ */
+[...document.getElementsByClassName("task-list-item")].forEach(elem => {
+
+    if (elem.textContent.match(/^ *[A-Za-z]*:/)) {
+        elem.classList.add("waiting-for");
+    }
+});
+
+/**
  * Modify the default input boxes that showdown creates
  */
 [...document.getElementsByTagName("input")].forEach(elem => {
@@ -114,16 +128,13 @@ if (headersInContent && headersInContent.length > 0) {
 
         // Wrap the text in a <span> ... </span> for easier styling
         const parent = elem.parentNode;
+        const span = document.createElement("span");
         [...parent.childNodes].forEach(child => {
-
-            if (child.nodeName === "#text") {
-
-                const span = document.createElement("span");
-                span.textContent = child.textContent;
-                parent.removeChild(child);
-                parent.appendChild(span);
+            if (child.nodeName !== "INPUT") {
+                span.appendChild(child);
             }
         });
+        parent.appendChild(span);
     }
 });
 

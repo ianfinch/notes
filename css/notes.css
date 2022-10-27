@@ -19,6 +19,8 @@
     --default-panel-bg: #fff;
     --default-success-bg: #c6efce;
     --default-success-fg: #006100;
+    --default-warning-bg: #ffeb9c;
+    --default-warning-fg:#9c5700;
     --default-failure-bg: #ffc7ce;
     --default-failure-fg:#9c0006;
 }
@@ -422,6 +424,7 @@ footer {
 li.task-list-item {
     padding-left: 1.5em;
     margin-right: calc(var(--ball-diameter) + var(--ball-border));
+    margin-bottom: 1px;
 }
 
 li.task-list-item input[type="checkbox"] {
@@ -429,34 +432,61 @@ li.task-list-item input[type="checkbox"] {
     position: absolute;
     width: 0;
 }
+
 li.task-list-item input[type="checkbox"] + span::before {
     width: 1.4em;
     text-align: center;
-    content: "\f04d";
+    content: "";
     position: absolute;
     left: 0;
     font-family: "Line Awesome Free";
     font-weight: 900;
     font-size: 16px;
-    background: var( --failure-bg, var( --default-failure-bg ) );
 }
+
 li.task-list-item input[type="checkbox"]:checked + span::before {
     content: "\f00c";
+    color: var( --success-fg, var( --default-success-fg ) );
     background: var( --success-bg, var( --default-success-bg ) );
 }
+
+li.task-list-item input[type="checkbox"]:not(:checked) + span::before {
+    content: "\f04d";
+    color: var( --failure-fg, var( --default-failure-fg ) );
+    background: var( --failure-bg, var( --default-failure-bg ) );
+}
+
+li.task-list-item.waiting-for input[type="checkbox"]:not(:checked) + span::before {
+    content: "\f04d";
+    color: var( --warning-fg, var( --default-warning-fg ) );
+    background: var( --warning-bg, var( --default-warning-bg ) );
+}
+
 li.task-list-item input[type="checkbox"] + span {
     display: block;
     font-size: 14px;
     line-height: 20px;
 }
+
 li.task-list-item input[type="checkbox"]:checked + span {
     text-decoration: line-through;
     color: var( --success-fg, var( --default-success-fg ) );
     background: var( --success-bg, var( --default-success-bg ) );
 }
+
 li.task-list-item input[type="checkbox"]:not(:checked) + span {
     color: var( --failure-fg, var( --default-failure-fg ) );
     background: var( --failure-bg, var( --default-failure-bg ) );
+}
+
+li.task-list-item.waiting-for input[type="checkbox"]:not(:checked) + span {
+    color: var( --warning-fg, var( --default-warning-fg ) );
+    background: var( --warning-bg, var( --default-warning-bg ) );
+}
+
+/* Remove the colour from strong tags within task items */
+li.task-list-item strong {
+    color: inherit;
 }
 
 /* Spreadsheet-style table formatting */
