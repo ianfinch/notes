@@ -1,3 +1,11 @@
+h2 {
+    margin-top: 1em;
+}
+
+#content section:first-child h2 {
+    margin-top: 0;
+}
+
 ul {
     padding-top: 20px;
     position: relative;
@@ -69,6 +77,10 @@ div.org {
 
 div.org ul {
     margin: 0;
+}
+
+div.org ul:first-child {
+    padding-top: 0;
 }
 
 div.person {

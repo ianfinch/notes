@@ -423,8 +423,13 @@ footer {
 /* Checkboxes */
 li.task-list-item {
     padding-left: 1.5em;
-    margin-right: calc(var(--ball-diameter) + var(--ball-border));
     margin-bottom: 1px;
+}
+
+/* Use #content to increase specificity */
+#content li.task-list-item span {
+    display: inline-block;
+    padding-right: 4px;
 }
 
 li.task-list-item input[type="checkbox"] {
