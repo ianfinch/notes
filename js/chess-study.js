@@ -110,12 +110,17 @@ const createFens = (orientation, moves) => {
 
         // Convert the move to a 'from' and 'to' square
         const converted = convertNotation(move.turn, move.notation.notation, board);
-        const [from, to] = converted.split("-");
+        const moveList = converted.split(",");
+        moveList.forEach(moveFromList => {
 
-        // Update the board to reflect the move
-        const piece = board[from];
-        delete board[from];
-        board[to] = piece;
+            const [from, to] = moveFromList.split("-");
+
+            // Update the board to reflect the move
+            const piece = board[from];
+            delete board[from];
+            board[to] = piece;
+        });
+
         result[move.moveNumber + move.turn] = positionToFen(orientation, board);
     });
 
@@ -200,7 +205,7 @@ const pgnMoves = (orientation, moves) => {
     table.classList.add("moves");
 
     // Go through the moves, building up the move table
-    const result = moves.reduce((result, move) => {
+    const movesTable = moves.reduce((result, move) => {
 
         // Find the last row in the table
         const tableRows = [...result.children];
@@ -250,7 +255,12 @@ const pgnMoves = (orientation, moves) => {
     table.appendChild(commentContainer);
     commentContainer.style.display = "none";
 
-    return result;
+    // Wrap the table in a DIV, so we can set up scrolling
+    const movesContainer = document.createElement("div");
+    movesContainer.classList.add("moves-container");
+    movesContainer.appendChild(movesTable);
+
+    return movesContainer;
 };
 
 /**

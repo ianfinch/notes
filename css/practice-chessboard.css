@@ -1,4 +1,4 @@
-/* Variables */
+Container Variables */
 :root {
     --section-width: 320px;
     --section-gutter: 32px;
@@ -221,6 +221,12 @@ div.tags + #content {
 }
 
 /* Style our moves table */
+div.moves-container {
+    height: 550px;
+    overflow-y: scroll;
+    width: fit-content;
+}
+
 table.moves {
     border-collapse: collapse;
     background: #dddfff;
