@@ -572,3 +572,8 @@ li.task-list-item strong {
     background: var( --failure-bg, var( --default-failure-bg ) );
     color: var( --failure-fg, var( --default-failure-fg ) );
 }
+
+/* Mermaid diagrams we want a plain background */
+pre.mermaid {
+    background: transparent;
+}

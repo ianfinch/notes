@@ -68,3 +68,8 @@ fi
     cp ./pgn-parser/lib/index.umd.js ./pgn-parser.js
     rm -rf ./pgn-parser
 )
+
+(
+    cd $base/lib/js
+    $curl -L "https://unpkg.com/mermaid@9.2.2/dist/mermaid.min.js" > mermaid.js
+)
