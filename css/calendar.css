@@ -102,6 +102,7 @@ nav span.separator {
 
 .day.holiday > div.label {
     background: purple;
+    margin-right: 4px;
 }
 
 .name-of-day {
