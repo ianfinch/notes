@@ -278,7 +278,7 @@ const getData = tableId => {
  */
 const parseFloatOrBlank = x => {
 
-    if (x === "") {
+    if ([ "", "N/A" ].includes(x)) {
         return 0;
     }
 
