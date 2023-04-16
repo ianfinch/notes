@@ -169,8 +169,16 @@ const addFormula = (fn, tableId, columnNumber, rowNumber) => {
 
         const tbody = table.getElementsByTagName("tbody")[0];
 
+        // If the column number is a string, find the column with that heading
+        if (typeof columnNumber === "string") {
+
+            const headingElems = [...table.getElementsByTagName("thead")[0].children.item(0).children];
+            const headings = headingElems.map(heading => heading.textContent);
+            columnNumber = headings.indexOf(columnNumber);
+        }
+
         // Calculate the row number if it's negative
-        if (typeof rowNumber !== "undefined" && rowNumber < 0) {
+        if (typeof rowNumber !== "undefined" && typeof rowNumber !== "string" && rowNumber < 0) {
 
             rowNumber = tbody.children.length + rowNumber;
         }
@@ -178,8 +186,13 @@ const addFormula = (fn, tableId, columnNumber, rowNumber) => {
         // Go through the table applying the calculation
         [...tbody.children].forEach((row, i) => {
 
-            // If we have a row number, restrict ourselves to that row
-            if (typeof rowNumber === "undefined" || rowNumber === i) {
+            // We may have no row number (in which case we add the formula to
+            // every row), a numeric row value (which we just compare to the
+            // iteration counter), or a string row value (where we see if it
+            // matches the content of the first cell in the row)
+            if (typeof rowNumber === "undefined" ||
+                (typeof rowNumber === "number" && rowNumber === i) ||
+                (typeof rowNumber === "string" && rowNumber === row.children.item(0).textContent)) {
 
                 // Extract the data from the table (have to do this inside the loop, so
                 // that we get any updated values from previous rows)
