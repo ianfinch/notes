@@ -364,29 +364,59 @@ const displayMove = (moveString, chessboard) => {
 };
 
 /**
+ * Generate list of moves from a move table
+ */
+const movesFromTable = tbody => {
+
+    return [...tbody.children].map(tr => {
+
+        const tdList = [...tr.children].map(x => x.textContent);
+        const moves = [ "w#" + tdList[1], "b#" + tdList[2] ];
+        return moves;
+    }).flat().filter(x => x.match(/#[a-hRNBQKO]/)).join(",");
+};
+
+/**
  * Function to update the chessboard in the current section with the FEN passed as a parameter
  */
 const updateChessboard = (moves, link) => {
 
-    // Find the section this link is in
-    let section = link;
-    while (section.localName && section.localName !== "section") {
-        section = section.parentNode;
+    // Find the table for this link
+    let tbody = link;
+    while (tbody.localName && tbody.localName !== "tbody") {
+        tbody = tbody.parentNode;
     }
 
-    // Check we found a section
-    if (section.localName && section.localName === "section") {
+    // Check we found a tbody
+    if (tbody.localName && tbody.localName === "tbody") {
 
-        // Now find the chessboard
-        const board = section.getElementsByClassName("chessboard")[0];
-        if (board && board.chessboard) {
+        // Add any moves from the table to the passed in moves
+        const additionalMoves = movesFromTable(tbody);
+        if (additionalMoves) {
 
-            // Store each of the moves
-            clearPendingMoves();
-            moves.split(/, */).forEach(move => queueMove(move));
+            moves = moves + "," + additionalMoves;
+        }
 
-            // Kick off the first move
-            makeMove(board.chessboard);
+        // Find the section this link is in
+        let section = link;
+        while (section.localName && section.localName !== "section") {
+            section = section.parentNode;
+        }
+
+        // Check we found a section
+        if (section.localName && section.localName === "section") {
+
+            // Now find the chessboard
+            const board = section.getElementsByClassName("chessboard")[0];
+            if (board && board.chessboard) {
+
+                // Store each of the moves
+                clearPendingMoves();
+                moves.split(/, */).forEach(move => queueMove(move));
+
+                // Kick off the first move
+                makeMove(board.chessboard);
+            }
         }
     }
 };
