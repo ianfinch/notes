@@ -4,9 +4,20 @@
 const addLine = text => {
 
     const div = document.createElement("div");
-    div.textContent = text;
     const notes = document.getElementsByTagName("section")[0];
+    const n = [...notes.children].filter(x => x.tagName === "DIV").length + 1;
+    div.textContent = n + ". " + text;
     notes.appendChild(div);
+};
+
+/**
+ * Add text to the last line of the notes section
+ */
+const addToLastLine = text => {
+
+    const notes = document.getElementsByTagName("section")[0];
+    const lastDiv = [...notes.getElementsByTagName("div")].slice(-1)[0];
+    lastDiv.textContent = lastDiv.textContent + text;
 };
 
 /**
@@ -16,18 +27,18 @@ const addMoveToNotes = (player, move) => {
 
     if (player === "w") {
 
-        addLine("1. " + move);
+        addLine(move);
 
     } else {
 
-        addToLastLine(" " + move.b);
+        addToLastLine(" " + move);
     }
 };
 
 /**
  * Create a "play again" button
  */
-const playAgainButton = () => {
+const playAgainButton = moves => {
 
     const button = document.createElement("button");
     button.textContent = "play again";
@@ -46,7 +57,7 @@ const playAgainButton = () => {
         });
 
         // Start the new game
-        init();
+        startGame(moves);
     });
 
     return button;
@@ -55,25 +66,23 @@ const playAgainButton = () => {
 /**
  * Add a play again button to the bottom of the notes section
  */
-const addPlayAgainButton = () => {
+const addPlayAgainButton = moves => {
 
     const notes = document.getElementsByTagName("section")[0];
-    notes.appendChild(playAgainButton());
+    notes.appendChild(playAgainButton(moves));
 };
 
 /**
  * Do end of game housekeeping
  */
-const endOfGame = () => {
-
-    addLine("Line complete");
+const endOfGame = moves => {
 
 /*
     if ([...document.getElementsByTagName("ul")].length === 0) {
         addLine("All variations completed");
     } else {
 */
-        addPlayAgainButton();
+        addPlayAgainButton(moves);
 /*
     }
 */
@@ -90,25 +99,131 @@ const randomLine = lines => {
 };
 
 /**
+ * When a piece is moved, look for the next move in that line to make
+ */
+const pieceMovedHandler = (moves) => {
+
+    const chessboardDiv = document.getElementsByClassName("chessboard")[0];
+
+    return (oldLocation, newLocation, piece, newBoard, oldBoard, orientation) => {
+
+        const player = piece.substr(0, 1);
+
+        // The player should reflect the orientation, so cancel the move if
+        // that's not the case
+        if (orientation.substr(0, 1) !== player) {
+            return "snapback";
+        }
+
+        // Now get the next move for the player
+        const nextMove = moves.line[0];
+
+        // Check the move made against this next move tree - first we
+        // need to convert from the notation to a start/end pair
+        const convertedMove = convertNotation(player, nextMove, oldBoard);
+        if (!convertedMove) {
+            return "snapback";
+        }
+
+        // Now split the string into the start and end parts and check whether
+        // this is the expected move.  Note that castling can return a
+        // comma-separated pair of moves (and we only care about the first part
+        // of that), so we also need to handle that when we split the string
+        const multiMove = convertedMove.split(",");
+        const [moveFrom, moveTo] = multiMove[0].split("-");
+        if (moveFrom !== oldLocation || moveTo !== newLocation) {
+            return "snapback";
+        }
+
+        // Can update our notes now, since we know the move will happen
+        addMoveToNotes(player, nextMove);
+
+        // If there are additional moves (e.g. moving the rook for castling)
+        // then make those moves happen (with a delay to make them happen
+        // outside this handler)
+        if (multiMove[1]) {
+
+            setTimeout(() => {
+                chessboardDiv.chessboard.move(multiMove[1]);
+            }, 100);
+        }
+
+        // If we get this far, the move which was played matches the expected
+        // next move.  We will now remove that move from our line.
+        moves.line = moves.line.toSpliced(0, 1);
+
+        // Let the other player make their move - delay this slightly, so that
+        // this onDrop handler has time to complete its board update before the
+        // next move happens (otherwise the board update gets into a race)
+        setTimeout(() => {
+
+            // Run the opponent's move
+            opponentPlays(player === "w" ? "b" : "w", newBoard, moves);
+
+            // Update the drop handler with the new move tree resulting from the
+            // opponent's next move
+/*
+            if (afterOpponentsMove === null) {
+                chessboardDiv.dropHandler = () => null;
+            } else if (afterOpponentsMove.moveTree.length === 0) {
+                endOfGame(afterOpponentsMove.movesPlayed);
+            } else {
+                chessboardDiv.dropHandler = pieceMovedHandler(afterOpponentsMove.moveTree, afterOpponentsMove.movesPlayed);
+            }
+*/
+        }, 100);
+    };
+};
+
+/**
  * Play the opponent's move
  */
 const opponentPlays = (player, position, moves) => {
 
-    // Grab the next move
-    const move = moves[0];
-    moves = moves.toSpliced(0, 1);
+    // If we need a new board
+    const initialBoard = {
+        a1: "wR", b1: "wN", c1: "wB", d1: "wQ", e1: "wK", f1: "wB", g1: "wN", h1: "wR",
+        a2: "wP", b2: "wP", c2: "wP", d2: "wP", e2: "wP", f2: "wP", g2: "wP", h2: "wP",
+        a7: "bP", b7: "bP", c7: "bP", d7: "bP", e7: "bP", f7: "bP", g7: "bP", h7: "bP",
+        a8: "bR", b8: "bN", c8: "bB", d8: "bQ", e8: "bK", f8: "bB", g8: "bN", h8: "bR"
+    };
 
-    // Play the move
-    const convertedMove = convertNotation(player, move, position);
-    const chessboard = document.getElementsByClassName("chessboard")[0].chessboard;
-    chessboard.move.apply(null, convertedMove.split(","));
-    addMoveToNotes(player, move);
+    // If we don't have a position, use the initial one
+    if (position === null) {
+
+        position = initialBoard;
+    }
+
+    // If there's no next move, go on to the next line
+    if (moves.line.length === 0) {
+
+        moves.line = moves.remaining[0];
+        moves.remaining = moves.remaining.toSpliced(0, 1);
+        endOfGame(moves);
+
+    // Otherwise, move on to the next move
+    } else {
+
+        // Grab the next move
+        const move = moves.line[0];
+        moves.line = moves.line.toSpliced(0, 1);
+
+        // Play the move
+        const convertedMove = convertNotation(player, move, position);
+        const chessboard = document.getElementsByClassName("chessboard")[0].chessboard;
+        chessboard.move.apply(null, convertedMove.split(","));
+        addMoveToNotes(player, move);
+
+        // Set up the response for the next move
+        const chessboardDiv = document.getElementsByClassName("chessboard")[0];
+        chessboardDiv.dropHandler = pieceMovedHandler(moves);
+    }
 };
 
 /**
- * Initialise everything
+ * Start the game
  */
-const init = lines => {
+const startGame = lines => {
 
     const chessboardDiv = document.getElementsByClassName("chessboard")[0];
 
@@ -127,32 +242,25 @@ alert("White TBD");
     // If we are playing as black, pick one of white's possible moves to start
     } else {
 
-        // Randomise the lines
-        const randomised = lines.reduce(result => {
-
-            const [selectedLine, remainingLines] = randomLine(result.original);
-            result.randomised.push(selectedLine);
-            result.original = remainingLines;
-            return result;
-            
-        }, { randomised: [], original: lines }).randomised;
-
-        const initialBoard = {
-            a1: "wR", b1: "wN", c1: "wB", d1: "wQ", e1: "wK", f1: "wB", g1: "wN", h1: "wR",
-            a2: "wP", b2: "wP", c2: "wP", d2: "wP", e2: "wP", f2: "wP", g2: "wP", h2: "wP",
-            a7: "bP", b7: "bP", c7: "bP", d7: "bP", e7: "bP", f7: "bP", g7: "bP", h7: "bP",
-            a8: "bR", b8: "bN", c8: "bB", d8: "bQ", e8: "bK", f8: "bB", g8: "bN", h8: "bR"
-        };
-
-        opponentPlays("w", initialBoard, randomised[0].split(/ /));
-
-/*
-        const whiteMove = opponentPlays("w", moveTree, initialBoard, []);
-        if (whiteMove.moveTree.length === 0) {
-            endOfGame(whiteMove.movesPlayed);
-        } else {
-            chessboardDiv.dropHandler = pieceMovedHandler(whiteMove.moveTree, whiteMove.movesPlayed);
-        }
-*/
+        opponentPlays("w", null, lines);
     }
+};
+
+/**
+ * Initialise everything
+ */
+const init = lines => {
+
+    // Randomise the lines
+    const randomised = lines.reduce(result => {
+
+        const [selectedLine, remainingLines] = randomLine(result.original);
+        result.randomised.push(selectedLine);
+        result.original = remainingLines;
+        return result;
+        
+    }, { randomised: [], original: lines }).randomised.map(x => x.split(/ /));
+
+    // Now play
+    startGame({ line: randomised[0], remaining: randomised.toSpliced(0, 1) });
 };
