@@ -77,15 +77,10 @@ const addPlayAgainButton = moves => {
  */
 const endOfGame = moves => {
 
-/*
-    if ([...document.getElementsByTagName("ul")].length === 0) {
-        addLine("All variations completed");
-    } else {
-*/
-        addPlayAgainButton(moves);
-/*
-    }
-*/
+    moves.line = moves.remaining[0];
+    moves.remaining = moves.remaining.toSpliced(0, 1);
+
+    addPlayAgainButton(moves);
 };
 
 /**
@@ -159,18 +154,6 @@ const pieceMovedHandler = (moves) => {
 
             // Run the opponent's move
             opponentPlays(player === "w" ? "b" : "w", newBoard, moves);
-
-            // Update the drop handler with the new move tree resulting from the
-            // opponent's next move
-/*
-            if (afterOpponentsMove === null) {
-                chessboardDiv.dropHandler = () => null;
-            } else if (afterOpponentsMove.moveTree.length === 0) {
-                endOfGame(afterOpponentsMove.movesPlayed);
-            } else {
-                chessboardDiv.dropHandler = pieceMovedHandler(afterOpponentsMove.moveTree, afterOpponentsMove.movesPlayed);
-            }
-*/
         }, 100);
     };
 };
@@ -197,8 +180,6 @@ const opponentPlays = (player, position, moves) => {
     // If there's no next move, go on to the next line
     if (moves.line.length === 0) {
 
-        moves.line = moves.remaining[0];
-        moves.remaining = moves.remaining.toSpliced(0, 1);
         endOfGame(moves);
 
     // Otherwise, move on to the next move
@@ -214,9 +195,17 @@ const opponentPlays = (player, position, moves) => {
         chessboard.move.apply(null, convertedMove.split(","));
         addMoveToNotes(player, move);
 
+        // Check we still have moves to play
+        if (moves.line.length === 0) {
+
+            endOfGame(moves);
+
         // Set up the response for the next move
-        const chessboardDiv = document.getElementsByClassName("chessboard")[0];
-        chessboardDiv.dropHandler = pieceMovedHandler(moves);
+        } else {
+
+            const chessboardDiv = document.getElementsByClassName("chessboard")[0];
+            chessboardDiv.dropHandler = pieceMovedHandler(moves);
+        }
     }
 };
 
