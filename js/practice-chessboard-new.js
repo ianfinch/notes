@@ -1,5 +1,5 @@
 /**
- * Add text to the notes section
+ * Add a move to the notes section
  */
 const addLine = text => {
 
@@ -7,6 +7,19 @@ const addLine = text => {
     const notes = document.getElementsByTagName("section")[0];
     const n = [...notes.children].filter(x => x.tagName === "DIV").length + 1;
     div.textContent = n + ". " + text;
+    notes.appendChild(div);
+};
+
+/**
+ * Add some text to the notes section
+ */
+const addText = text => {
+
+    const div = document.createElement("div");
+    const strong = document.createElement("strong");
+    const notes = document.getElementsByTagName("section")[0];
+    strong.textContent = text;
+    div.appendChild(strong);
     notes.appendChild(div);
 };
 
@@ -77,10 +90,17 @@ const addPlayAgainButton = moves => {
  */
 const endOfGame = moves => {
 
-    moves.line = moves.remaining[0];
-    moves.remaining = moves.remaining.toSpliced(0, 1);
+    if (moves.remaining[0]) {
 
-    addPlayAgainButton(moves);
+        addText("Line complete");
+        moves.line = moves.remaining[0];
+        moves.remaining = moves.remaining.toSpliced(0, 1);
+        addPlayAgainButton(moves);
+
+    } else {
+
+        addText("All lines complete");
+    }
 };
 
 /**
@@ -177,8 +197,9 @@ const opponentPlays = (player, position, moves) => {
         position = initialBoard;
     }
 
+    // If there are is no next line, we've exhausted all the variations
     // If there's no next move, go on to the next line
-    if (moves.line.length === 0) {
+    if (!moves.line || moves.line.length === 0) {
 
         endOfGame(moves);
 
