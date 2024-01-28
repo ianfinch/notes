@@ -572,6 +572,15 @@ li.task-list-item strong {
     color: var( --failure-fg, var( --default-failure-fg ) );
 }
 
+/* A list directly under a table is assumed to be notes for the table */
+.spreadsheet table + ul {
+    margin-top: -28px;
+    margin-left: 1em;
+    margin-bottom: 32px;
+    font-size: 12px;
+    font-style: italic;
+}
+
 /* Mermaid diagrams we want a plain background */
 pre.mermaid {
     background: transparent;
