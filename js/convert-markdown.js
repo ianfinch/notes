@@ -8,7 +8,7 @@ converter.setOption("tasklists", true);
  * Given an element which contains the text to be converted, perform the
  * conversion, add the HTML into the document, and hide the original text
  */
-const convertMarkdown = mdElem => {
+const convertMarkdownElement = mdElem => {
 
     // We want the content of the passed in DOM element
     let md = mdElem.textContent;
@@ -39,65 +39,74 @@ const convertMarkdown = mdElem => {
 /**
  * Actually do the markdown conversion
  */
-[...document.getElementsByClassName("markdown")].forEach(convertMarkdown);
+const convertMarkdown = () => {
+
+    [...document.getElementsByClassName("markdown")].forEach(convertMarkdownElement);
+};
 
 /**
  * If there's an <h1> ... </h1> in the content, pull it up into the header and
  * the title.  If there is more than one, just grab the first
  */
-const headersInContent = document.getElementById("content").getElementsByTagName("h1");
-if (headersInContent && headersInContent.length > 0) {
+const setPageHeader = () => {
+
+    const headersInContent = document.getElementById("content").getElementsByTagName("h1");
+    if (headersInContent && headersInContent.length > 0) {
     
-    // First find our top level heading in the content
-    const h1 = [...headersInContent][0];
-    if (h1) {
+        // First find our top level heading in the content
+        const h1 = [...headersInContent][0];
+        if (h1) {
 
-        // Now look for an <h1> ... </h1> in the header
-        const header = [...document.getElementsByTagName("header")][0];
-        if (header) {
+            // Now look for an <h1> ... </h1> in the header
+            const header = [...document.getElementsByTagName("header")][0];
+            if (header) {
 
-            [...header.children].forEach(elem => {
+                [...header.children].forEach(elem => {
 
-                // If we find one, replace it with the one from the content
-                if (elem.nodeName === "H1") {
+                    // If we find one, replace it with the one from the content
+                    if (elem.nodeName === "H1") {
 
-                    header.removeChild(elem);
-                    header.appendChild(h1);
+                        header.removeChild(elem);
+                        header.appendChild(h1);
 
-                }
-            });
+                    }
+                });
 
-        // If there's no header, add one in
-        } else {
+            // If there's no header, add one in
+            } else {
 
-            const header = document.createElement("header");
-            header.appendChild(h1);
-            [...document.getElementsByTagName("body")][0].insertAdjacentElement("afterbegin", header);
-        }
+                const header = document.createElement("header");
+                header.appendChild(h1);
+                [...document.getElementsByTagName("body")][0].insertAdjacentElement("afterbegin", header);
+            }
 
-        // Update the title too
-        const title = document.getElementsByTagName("title")[0];
-        if (title) {
-            title.textContent = h1.textContent;
+            // Update the title too
+            const title = document.getElementsByTagName("title")[0];
+            if (title) {
+                title.textContent = h1.textContent;
+            }
         }
     }
-}
+};
 
 /**
  * Add a 'highlighted' class to any section which has a <strong> tag inside its
  * <h2> tag (i.e. is ## __something__ in the markdown)
  */
-[...document.getElementsByTagName("section")].forEach(section => {
+const highlightSections = () => {
 
-    const h2 = [...section.getElementsByTagName("h2")];
-    if (h2.length > 0) {
+    [...document.getElementsByTagName("section")].forEach(section => {
 
-        if ([...h2[0].getElementsByTagName("strong")].length > 0) {
+        const h2 = [...section.getElementsByTagName("h2")];
+        if (h2.length > 0) {
 
-            section.classList.add("highlighted");
+            if ([...h2[0].getElementsByTagName("strong")].length > 0) {
+
+                section.classList.add("highlighted");
+            }
         }
-    }
-});
+    });
+};
 
 /**
  * Mark up task items which are waiting for someone else to do something
@@ -106,63 +115,96 @@ if (headersInContent && headersInContent.length > 0) {
  * indicates it is someone's name and I am waiting for them to complete this
  * task
  */
-[...document.getElementsByClassName("task-list-item")].forEach(elem => {
+const taskItemsWaiting = () => {
 
-    if (elem.textContent.match(/^ *[A-Za-z]*:/)) {
-        elem.classList.add("waiting-for");
-    }
-});
+    [...document.getElementsByClassName("task-list-item")].forEach(elem => {
+
+        if (elem.textContent.match(/^ *[A-Za-z]*:/)) {
+            elem.classList.add("waiting-for");
+        }
+    });
+};
 
 /**
  * Modify the default input boxes that showdown creates
  */
-[...document.getElementsByTagName("input")].forEach(elem => {
+const tidyInputElements = () => {
 
-    if (elem.type === "checkbox") {
+    [...document.getElementsByTagName("input")].forEach(elem => {
 
-        // Remove the inline style that showdown adds
-        elem.style.removeProperty("margin-bottom");
-        elem.style.removeProperty("margin-left");
-        elem.style.removeProperty("margin-right");
-        elem.style.removeProperty("margin-top");
+        if (elem.type === "checkbox") {
 
-        // Wrap the text in a <span> ... </span> for easier styling
-        const parent = elem.parentNode;
-        const span = document.createElement("span");
-        [...parent.childNodes].forEach(child => {
-            if (child.nodeName !== "INPUT") {
-                span.appendChild(child);
-            }
-        });
-        parent.appendChild(span);
-    }
-});
+            // Remove the inline style that showdown adds
+            elem.style.removeProperty("margin-bottom");
+            elem.style.removeProperty("margin-left");
+            elem.style.removeProperty("margin-right");
+            elem.style.removeProperty("margin-top");
+
+            // Wrap the text in a <span> ... </span> for easier styling
+            const parent = elem.parentNode;
+            const span = document.createElement("span");
+            [...parent.childNodes].forEach(child => {
+                if (child.nodeName !== "INPUT") {
+                    span.appendChild(child);
+                }
+            });
+            parent.appendChild(span);
+        }
+    });
+};
 
 /**
- * Add icons to bookmark sections
+ * Add icons to bookmark sections, and fit them into the content area
  */
-[...document.getElementsByClassName("bookmarks")].forEach(section => {
+const positionSections = () => {
 
-    [...section.getElementsByTagName("h2")].forEach(h2 => {
+    [...document.getElementsByClassName("bookmarks")].forEach(section => {
 
-        let icon;
-        if (h2.getElementsByTagName("em").length === 0) {
+        // Set the icon
+        [...section.getElementsByTagName("h2")].forEach(h2 => {
 
-            icon = "link";
+            let icon;
+            if (h2.getElementsByTagName("em").length === 0) {
 
-        } else {
+                icon = "link";
 
-            const em = h2.getElementsByTagName("em")[0];
-            icon = em.textContent;
-            h2.removeChild(em);
-        }
+            } else {
 
-        const i = document.createElement("i");
-        i.classList.add("las");
-        i.classList.add("la-" + icon);
-        h2.appendChild(i);
+                const em = h2.getElementsByTagName("em")[0];
+                icon = em.textContent;
+                h2.removeChild(em);
+            }
+
+            const i = document.createElement("i");
+            i.classList.add("las");
+            i.classList.add("la-" + icon);
+            h2.appendChild(i);
+        });
+
+        // Position in the content area
+        const headerHeight = document.getElementsByTagName("header")[0].getBoundingClientRect().height;
+        const maxHeight = window.innerHeight - headerHeight;
+        [...section.getElementsByTagName("section")].reduce((tracker, section) => {
+
+            // See if we've got space or need to start a new column
+            if (tracker.top + tracker.margin.bottom + section.clientHeight > tracker.max) {
+
+                tracker.top = 0;
+                tracker.left = tracker.left + section.clientWidth + tracker.margin.right;
+            }
+
+            // Position this section
+            section.style.marginTop = tracker.top + "px";
+            section.style.marginLeft = tracker.left + "px";
+
+            // Move on to next section
+            tracker.top = tracker.top + tracker.margin.bottom + section.clientHeight;
+
+            return tracker;
+
+        }, { max: maxHeight, top: 0, left: 0, margin: { right: 32 , bottom: 16 }});
     });
-});
+};
 
 /**
  * Function which can be added to the HTML file to enable two columns within
@@ -180,7 +222,7 @@ if (headersInContent && headersInContent.length > 0) {
  * array can limit which headings are set as two columns, and the exclude array
  * can make some within that list back to one column again.
  */
-const twocolumn = ({ include, exclude } = {}) => {
+const formatTwoColumns = ({ include, exclude } = {}) => {
 
     // If we don't have an include list, include everything
     if (!include) {
@@ -226,3 +268,55 @@ const twocolumn = ({ include, exclude } = {}) => {
         }
     });
 };
+
+/**
+ * Function to add post-load actions.  If initialisation has been completed,
+ * run immediately, otherwise add to a list for post-load processing
+ */
+let initialisationComplete = false;
+const postLoadList = [];
+const addPostLoad = fn => {
+
+    if (initialisationComplete) {
+
+        fn();
+    } else {
+
+        postLoadList.push(fn);
+    }
+};
+
+/**
+ * Set up two column formatting as a post-load activity
+ */
+const twoColumn = args => {
+
+    addPostLoad( () => { formatTwoColumns(args); });
+};
+
+/**
+ * Run all the updates after page has loaded
+ */
+addEventListener("load", () => {
+
+    // Handle conversion
+    convertMarkdown();
+    setPageHeader();
+    highlightSections();
+    taskItemsWaiting();
+    tidyInputElements();
+
+    // Handle any post-load activities
+    postLoadList.forEach(fn => fn());
+
+    // Finally arrange the sections
+    positionSections();
+});
+
+/**
+ * Also want to redo layout when window is resized
+ */
+addEventListener("resize", () => {
+
+    positionSections();
+});

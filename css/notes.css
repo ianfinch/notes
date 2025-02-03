@@ -180,15 +180,6 @@ div#content.panels {
   align-content: flex-start;
 }
 
-/* We want to wrap bookmarks vertically */
-div#content.bookmarks {
-  display: flex;
-  flex-wrap: wrap;
-  align-content: flex-start;
-  flex-direction: column;
-  height: calc(100vh - 100px);
-}
-
 /* Panel-based sections */
 #content.panels section {
   background: var( --panel-bg, var( --default-panel-bg ) );
@@ -303,10 +294,10 @@ table tfoot td {
 }
 
 .bookmarks section {
+  position: absolute;
   width: var(--section-width);
   margin-bottom: 24px;
   margin-right: var(--section-gutter);
-  position: relative;
 }
 
 .bookmarks h2 {
