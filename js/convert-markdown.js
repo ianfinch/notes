@@ -311,6 +311,9 @@ addEventListener("load", () => {
 
     // Finally arrange the sections
     positionSections();
+
+    // Publish an event to allow post-conversion activities
+    window.dispatchEvent(new Event("markdownConverted"));
 });
 
 /**
