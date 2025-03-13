@@ -496,4 +496,7 @@ const init = () => {
     }
 };
 
-init();
+addEventListener("chessboardConverted", () => {
+
+    init();
+});

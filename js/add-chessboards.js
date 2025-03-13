@@ -424,94 +424,110 @@ const updateChessboard = (moves, link) => {
 /**
  * Set up any chessboards, based on <PRE> ... </PRE> tags
  */
-[...document.getElementById("content").getElementsByTagName("pre")].forEach(pre => {
+const initChessboards = () => {
 
-    // We don't want the <pre> ... </pre> blocks which include our markdown, so
-    // filter them out
-    if (!pre.style.display || pre.style.display !== "none") {
+    [...document.getElementById("content").getElementsByTagName("pre")].forEach(pre => {
 
-        // Create a div for the board
-        const board = document.createElement("div");
-        board.id = "board-" + boardNumber;
-        board.classList.add("chessboard");
-        boardNumber++;
+        // We don't want the <pre> ... </pre> blocks which include our markdown, so
+        // filter them out
+        if (!pre.style.display || pre.style.display !== "none") {
 
-        // Move the items in the section to a new DIV
-        const section = pre.parentElement;
-        const column = document.createElement("div");
-        column.classList.add("section-content");
+            // Create a div for the board
+            const board = document.createElement("div");
+            board.id = "board-" + boardNumber;
+            board.classList.add("chessboard");
+            boardNumber++;
 
-        // Move display elements across to the new DIV
-        [...section.childNodes]
-            .filter(x => x.nodeName !== "PRE")
-            .forEach(child => column.appendChild(child));
+            // Move the items in the section to a new DIV
+            const section = pre.parentElement;
+            const column = document.createElement("div");
+            column.classList.add("section-content");
 
-        // Add the <pre> ... </pre> blocks to the end
-        [...section.childNodes]
-            .filter(x => x.nodeName === "PRE")
-            .forEach(child => column.appendChild(child));
+            // Move display elements across to the new DIV
+            [...section.childNodes]
+                .filter(x => x.nodeName !== "PRE")
+                .forEach(child => column.appendChild(child));
 
-        // Add the new DIV to the section
-        section.appendChild(column);
+            // Add the <pre> ... </pre> blocks to the end
+            [...section.childNodes]
+                .filter(x => x.nodeName === "PRE")
+                .forEach(child => column.appendChild(child));
 
-        // Add the board to the page
-        section.appendChild(board);
-        section.classList.add("contains-chessboard");
+            // Add the new DIV to the section
+            section.appendChild(column);
 
-        // The content of the pre block is the FEN string
-        // ChessboardJs only wants the first part of this
-        const [fen] = pre.textContent.split(" ");
+            // Add the board to the page
+            section.appendChild(board);
+            section.classList.add("contains-chessboard");
 
-        // Check whether we need to flip the board
-        const codeBlock = section.getElementsByTagName("code");
-        const nextPlayer = codeBlock[0].classList.contains("black") ? "black" : "white";
+            // The content of the pre block is the FEN string
+            // ChessboardJs only wants the first part of this
+            const [fen] = pre.textContent.split(" ");
 
-        // Set the move end handler
-        board.moveEndHandler = triggerMakeMove(board);
+            // Check whether we need to flip the board
+            const codeBlock = section.getElementsByTagName("code");
+            const nextPlayer = codeBlock[0].classList.contains("black") ? "black" : "white";
 
-        // Set the drop handler
-        board.dropHandler = () => null;
+            // Set the move end handler
+            board.moveEndHandler = triggerMakeMove(board);
 
-        // Find where our chess pieces are
-        const cssBase = [...document.styleSheets].map(css => {
+            // Set the drop handler
+            board.dropHandler = () => null;
 
-            if (css.href.match(/\/chessboard-[^/]*\.min\.css/)) {
-                return css.href;
-            }
+            // Find where our chess pieces are
+            const cssBase = [...document.styleSheets].map(css => {
 
-            return null;
-        }).filter(x => x)[0].replace(/\/css\/[^/]*/, "");
+                if (css.href.match(/\/chessboard-[^/]*\.min\.css/)) {
+                    return css.href;
+                }
 
-        // Display the chessboard
-        board.chessboard = Chessboard(board.id, {
-            draggable: true,
-            moveSpeed: 500,
-            onDrop: (a, b, c, d, e, f) => { return board.dropHandler(a, b, c, d, e, f); },
-            onMoveEnd: () => { board.moveEndHandler(); },
-            orientation: nextPlayer,
-            pieceTheme: cssBase + "/img/chesspieces/wikipedia/{piece}.png",
-            position: fen,
-            showNotation: false
-        });
+                return null;
+            }).filter(x => x)[0].replace(/\/css\/[^/]*/, "");
 
-        // Hide the pre block
-        pre.style.display = "none";
-    }
-});
+            // Display the chessboard
+            board.chessboard = Chessboard(board.id, {
+                draggable: true,
+                moveSpeed: 500,
+                onDrop: (a, b, c, d, e, f) => { return board.dropHandler(a, b, c, d, e, f); },
+                onMoveEnd: () => { board.moveEndHandler(); },
+                orientation: nextPlayer,
+                pieceTheme: cssBase + "/img/chesspieces/wikipedia/{piece}.png",
+                position: fen,
+                showNotation: false
+            });
+
+            // Hide the pre block
+            pre.style.display = "none";
+        }
+    });
+};
 
 /**
  * Handle links (<a> ... </a> tags)
  */
-[...document.getElementById("content").getElementsByTagName("a")].forEach(link => {
+const initChessboardLinks = () => {
 
-    const basedir = location.href.replace(/[^\/]*$/, "");
-    const data = link.href.replace(basedir, "");
+    [...document.getElementById("content").getElementsByTagName("a")].forEach(link => {
 
-    if (data.match(/^(fen|w|b)#/)) {
+        const basedir = location.href.replace(/[^\/]*$/, "");
+        const data = link.href.replace(basedir, "");
 
-        const player = data.substr(0, 1);
-        const move = decodeURI(data);
-        link.removeAttribute("href");
-        link.addEventListener("click", e => updateChessboard(move, e.target));
-    }
+        if (data.match(/^(fen|w|b)#/)) {
+
+            const player = data.substr(0, 1);
+            const move = decodeURI(data);
+            link.removeAttribute("href");
+            link.addEventListener("click", e => updateChessboard(move, e.target));
+        }
+    });
+};
+
+/**
+ * Initialise the chessboard after the markdown conversion is complete
+ */
+addEventListener("markdownConverted", () => {
+
+    initChessboards();
+    initChessboardLinks();
+    window.dispatchEvent(new Event("chessboardConverted"));
 });
