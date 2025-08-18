@@ -3,6 +3,61 @@ converter.setOption("tables", true);
 converter.setOption("tasklists", true);
 
 /**
+ * Add a nav bar to the page
+ */
+const addNavBar = () => {
+
+    if (typeof global$nav === "undefined") {
+        return;
+    }
+
+    const container = document.createElement("div");
+    container.setAttribute("id", "container");
+
+    const nav = document.createElement("div");
+    nav.setAttribute("id", "nav");
+
+    const pre = document.createElement("pre");
+    pre.classList.add("markdown");
+    pre.textContent = global$nav.content.join("\n");
+    nav.appendChild(pre);
+
+    const content = document.getElementById("content");
+
+    container.appendChild(nav);
+    container.appendChild(content);
+    document.getElementsByTagName("body")[0].appendChild(container);
+};
+
+/**
+ * Uppercase the first letter of a string
+ */
+const upperCaseFirstLetter = str => {
+
+    return str.split(/ /)
+            .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+            .join(" ");
+};
+
+/**
+ * Convert wikilinks into conventional markdown links
+ */
+const convertWikilink = str => {
+
+    let link = str.replace("[[", "")
+                  .replace("]]", "");
+
+    let label = link.replace(/\.html$/, "")
+                    .replace(/\/index$/, "")
+                    .replace(/^.*\//, "")
+                    .replace(/-/g, " ");
+
+    label = upperCaseFirstLetter(label);
+
+    return "[" + label + "](" + link + ")";
+};
+
+/**
  * Function to perform markdown conversion to HTML
  *
  * Given an element which contains the text to be converted, perform the
@@ -12,6 +67,9 @@ const convertMarkdownElement = mdElem => {
 
     // We want the content of the passed in DOM element
     let md = mdElem.textContent;
+
+    // Handle wikilinks
+    md = md.replace(/\[\[[^\]]*\]\]/g, convertWikilink);
 
     // If an object 'vars' is defined, use that to perform variable substitution
     // for patterns of the form {% ... %} within the markdown
@@ -31,7 +89,7 @@ const convertMarkdownElement = mdElem => {
     // Add the generated HTML to the page and hide the markdown
     mdElem.insertAdjacentHTML("beforebegin", html);
     mdElem.style.display = "none";
-}
+};
 
 /**
  * Actually do the markdown conversion
@@ -131,6 +189,7 @@ const tidyInputElements = () => {
 addEventListener("load", () => {
 
     // Handle conversion
+    addNavBar();
     convertMarkdown();
     setPageTitle();
     highlightSections();

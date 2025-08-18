@@ -96,6 +96,34 @@ a:hover {
   color: #cc0000;
   text-decoration: underline;
 }
+
+/* Use a flex layout to manage the navigation bar */
+div#container {
+    display: flex;
+}
+
+div#nav {
+    background: darkcyan;
+    color: white;
+    padding: 8px;
+}
+
+div#nav h1 {
+    font-size: 16px;
+}
+
+div#nav a {
+    color: white;
+}
+
+div#nav ul {
+    margin-left: 14px;
+}
+
+div#nav li {
+    margin-bottom: 2px;
+}
+
 /* The content area */
 div#content {
   padding: 24px 32px;
