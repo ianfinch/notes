@@ -1,21 +1,9 @@
 /* Colours */
 :root {
-    --default-body-bg: #ffe;
-    --default-body-fg: #592a0e;
+    --default-body-bg: #fff;
+    --default-body-fg: #000;
     --default-body-fg-strong: dodgerblue;
     --default-pre-bg: #ccc;
-    --default-header-bg: #592a0e;
-    --default-header-fg: #fff;
-    --default-header-title-bg: #f2dfa7;
-    --default-header-title-fg: #592a0e;
-    --default-header-border-bg: #592a0e;
-    --default-header-accent-bg: #f2dfa7;
-    --default-header-accent-fg: #592a0e;
-    --default-header-link-fg: goldenrod;
-    --default-header-link-hover: yellow;
-    --default-icon-bg: #f2dfa7;
-    --default-icon-fg: #06c;
-    --default-icon-border-bg: #592a0e;
     --default-panel-bg: #fff;
     --default-success-bg: #c6efce;
     --default-success-fg: #006100;
@@ -23,18 +11,6 @@
     --default-warning-fg:#9c5700;
     --default-failure-bg: #ffc7ce;
     --default-failure-fg:#9c0006;
-}
-
-/* Variables */
-:root {
-    --section-width: 320px;
-    --section-gutter: 48px;
-    --icon-size: 24px;
-    --ball-diameter: 30px;
-    --ball-border: 2px;
-    --ball-padding: 2px;
-    --column-width: 145px;
-    --column-gutter: 5px;
 }
 
 /* CSS reset */
@@ -119,54 +95,6 @@ a {
 a:hover {
   color: #cc0000;
   text-decoration: underline;
-}
-/* The header area */
-header {
-  background: var( --header-accent-bg, var( --default-header-accent-bg ) );
-  background-size: 80px 35px;
-  background-position: 99% 36px;
-  height: 32px;
-  border-color: var( --header-border-bg, var( --default-header-border-bg ) );
-  border-style: solid;
-  border-width: 0px 0px 1px 0px;
-}
-
-header::before {
-  content: "";
-  display: block;
-  width: 100%;
-  background: var( --header-bg, var( --default-header-bg ) );
-  height: 24px;
-}
-
-header nav {
-    display: block;
-    position: absolute;
-    top: 2px;
-    right: 16px;
-    color: var( --header-link-fg, var( --default-header-link-fg ) );
-}
-
-header nav a {
-    color: var( --header-link-fg, var( --default-header-link-fg ) );
-}
-
-header nav a:hover {
-    color: var( --header-link-hover, var( --default-header-link-hover ) );
-}
-
-header h1 {
-  position: relative;
-  top: -24px;
-  display: inline-block;
-  margin: 0px 0px 0px 32px;
-  background: var( --header-title-bg, var( --default-header-title-bg ) );
-  color: var( --header-title-fg, var( --default-header-title-fg ) );
-  padding: 8px 16px;
-  border-color: var( --header-border-bg, var( --default-header-border-bg ) );
-  border-style: solid;
-  border-width: 0px 1px 1px 1px;
-  border-radius: 0px 0px 16px 16px;
 }
 /* The content area */
 div#content {
@@ -283,99 +211,6 @@ table tfoot td {
 
 .chessboard-blue .black-3c85d {
     background-color: lightseagreen;
-}
-
-.bookmarks a {
-  color: var( --body-fg, var( --default-body-fg ) );
-}
-
-.bookmarks strong {
-    color: var( --body-fg-strong, var( --default-body-fg-strong ) );
-}
-
-.bookmarks section {
-  position: absolute;
-  width: var(--section-width);
-  margin-bottom: 24px;
-  margin-right: var(--section-gutter);
-}
-
-.bookmarks h2 {
-  line-height: 20px;
-  padding-bottom: 4px;
-  color: var( --body-fg, var( --default-body-fg ) );
-  border-color: var( --icon-border-bg, var( --default-icon-border-bg ) );
-  border-style: solid;
-  border-width: 0px 0px 2px 0px;
-}
-
-.bookmarks h3 {
-  color: var( --body-fg, var( --default-body-fg ) );
-  font-style: italic;
-}
-
-.bookmarks ul {
-  padding: 0px;
-  margin-left: 0px;
-  list-style-type: none;
-  color: var( --body-fg, var( --default-body-fg ) );
-}
-
-.bookmarks h2 i {
-    display: inline-block;
-    font-size: var(--icon-size);
-    font-style: normal;
-    color: var( --icon-fg, var( --default-icon-fg ) );
-    background: var( --icon-bg, var( --default-icon-bg ) );
-    height: calc(var(--ball-diameter) + var(--ball-border));
-    width: calc(var(--ball-diameter) + var(--ball-border));
-    padding-top: var(--ball-padding);
-    text-align: center;
-    border-color: var( --icon-border-bg, var( --default-icon-border-bg ) );
-    border-style: solid;
-    border-width: var(--ball-border);
-    border-radius: 50%;
-    position: absolute;
-    right: 0;
-    top: 9px;
-}
-
-.bookmarks h2::before {
-    content: "";
-    display: inline-block;
-    width: 8px;
-    height: 8px;
-    background: var( --icon-border-bg, var( --default-icon-border-bg ) );
-    border-radius: 4px;
-    position: absolute;
-    left: 0;
-    top: 21px;
-}
-
-.bookmarks p {
-    font-style: italic;
-    margin-bottom: 0.7em;
-}
-
-/* If we use two columns, reduce the width of list items */
-.bookmarks ul.twocolumn li {
-  width: var(--column-width);
-  height: 10px;
-  padding: 0px;
-  margin: 0;
-}
-
-/* In two columns, every other entry is positioned as a right hand column */
-.bookmarks ul.twocolumn li:nth-child(even) {
-    position: relative;
-    left: calc(var(--column-width) + var(--column-gutter));
-    top: -8px;
-}
-
-/* If we have two columns and the list item is in the left column, we need to
- * add a bit of additional space at the bottom */
-.bookmarks ul.twocolumn li:nth-child(even) + li:last-child {
-    margin-bottom: 18px;
 }
 
 footer {
