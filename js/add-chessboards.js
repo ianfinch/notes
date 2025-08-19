@@ -422,6 +422,26 @@ const updateChessboard = (moves, link) => {
 };
 
 /**
+ * Find sibling elements to a chessboard pre block
+ */
+const getSiblings = pre => {
+
+    const result = [];
+
+    // Go through the siblings until we reach a header or the end
+    for (elem = pre; elem && elem.nodeName !== "H2"; elem = elem.nextElementSibling) {
+
+        // Don't include pre tags
+        if (elem.nodeName !== "PRE") {
+
+            result.push(elem);
+        }
+    }
+
+    return result;
+};
+
+/**
  * Set up any chessboards, based on <PRE> ... </PRE> tags
  */
 const initChessboards = () => {
@@ -432,40 +452,32 @@ const initChessboards = () => {
         // filter them out
         if (!pre.style.display || pre.style.display !== "none") {
 
-            // Create a div for the board
+            // Group all the content together
+            const chessContent = document.createElement("div");
+            getSiblings(pre).forEach(elem => {
+
+                chessContent.append(elem);
+            });
+
+            // Create a div for the board, and add it to the container
             const board = document.createElement("div");
             board.id = "board-" + boardNumber;
             board.classList.add("chessboard");
             boardNumber++;
 
-            // Move the items in the section to a new DIV
-            const section = pre.parentElement;
-            const column = document.createElement("div");
-            column.classList.add("section-content");
-
-            // Move display elements across to the new DIV
-            [...section.childNodes]
-                .filter(x => x.nodeName !== "PRE")
-                .forEach(child => column.appendChild(child));
-
-            // Add the <pre> ... </pre> blocks to the end
-            [...section.childNodes]
-                .filter(x => x.nodeName === "PRE")
-                .forEach(child => column.appendChild(child));
-
-            // Add the new DIV to the section
-            section.appendChild(column);
-
-            // Add the board to the page
-            section.appendChild(board);
-            section.classList.add("contains-chessboard");
+            // Create a container for the chess board and put everything in it
+            const container = document.createElement("div");
+            container.classList.add("chessboard-container");
+            pre.after(container);
+            container.appendChild(board);
+            container.appendChild(chessContent);
 
             // The content of the pre block is the FEN string
             // ChessboardJs only wants the first part of this
             const [fen] = pre.textContent.split(" ");
 
             // Check whether we need to flip the board
-            const codeBlock = section.getElementsByTagName("code");
+            const codeBlock = pre.getElementsByTagName("code");
             const nextPlayer = codeBlock[0].classList.contains("black") ? "black" : "white";
 
             // Set the move end handler

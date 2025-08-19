@@ -30,9 +30,7 @@ summary, time, mark, audio, video {
   vertical-align: baseline;
 }
 article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav,
-section {
-  display: block;
-}
+
 /* Reset any floats */
 .reset {
   clear: both;
@@ -124,36 +122,32 @@ div#nav li {
     margin-bottom: 2px;
 }
 
+/* Hide and show the links */
+div#nav ul {
+    display: none;
+}
+
+div#nav h1 {
+    color: mediumturquoise;
+    cursor: pointer;
+}
+
+div#nav h1:hover {
+    color: #ffff00;
+    text-decoration: underline;
+}
+
+div#nav h1.expanded {
+    color: #ffffff;
+}
+
+div#nav h1.expanded + ul {
+    display: block;
+}
+
 /* The content area */
 div#content {
   padding: 24px 32px;
-}
-
-/* Wrap panels */
-div#content.panels {
-  display: flex;
-  flex-wrap: wrap;
-  align-content: flex-start;
-}
-
-/* Panel-based sections */
-#content.panels section {
-  background: var( --panel-bg, var( --default-panel-bg ) );
-  max-width: 740px;
-  padding: 0.5em 1em;
-  margin-right: 1em;
-  margin-bottom: 1em;
-  border: 1px solid black;
-}
-
-/* Highlighted sections */
-#content section.highlighted {
-    background: #ffffa5;
-}
-
-/* Content containing text notes */
-#content.text-notes section {
-    max-width: 800px;
 }
 
 /* If there's a bullet list directly after the heading, don't indent it */
@@ -201,36 +195,42 @@ table tfoot td {
 }
 
 /* Style any chessboards */
-.contains-chessboard {
-}
-
-.contains-chessboard table {
-    margin-left: 2em;
-    margin-bottom: 0.5em;
-}
-
-.contains-chessboard table thead {
-    display: none;
-}
-
-.contains-chessboard table tr {
-    background: none;
-}
-
-.contains-chessboard table td {
-    padding: 0px 8px;
-}
-
-.section-content {
-    width: 460px;
-    display: inline-block;
-    vertical-align: top;
-}
-
 .chessboard {
     width: 240px;
     display: inline-block;
     vertical-align: top;
+    margin-bottom: 32px;
+    flex: 0 0 240px;
+}
+
+.chessboard-container {
+    display: flex;
+    gap: 24px;
+}
+
+.chessboard-container ul {
+    margin-left: 1em;
+}
+
+.chessboard-container table {
+    margin-left: 2em;
+    margin-bottom: 0.5em;
+}
+
+.chessboard-container table thead {
+    display: none;
+}
+
+.chessboard-container table tr {
+    background: none;
+}
+
+.chessboard-container table td {
+    padding: 0px 8px;
+}
+
+.chessboard-container p {
+    max-width: 800px;
 }
 
 .chessboard-blue .white-1e1d7 {

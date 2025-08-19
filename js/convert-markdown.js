@@ -8,7 +8,7 @@ converter.setOption("tasklists", true);
 const addNavBar = () => {
 
     if (typeof global$nav === "undefined") {
-        return;
+        return false;
     }
 
     const container = document.createElement("div");
@@ -27,6 +27,41 @@ const addNavBar = () => {
     container.appendChild(nav);
     container.appendChild(content);
     document.getElementsByTagName("body")[0].appendChild(container);
+
+    return true;
+};
+
+/**
+ * Concertina the nav bar links
+ */
+const addNavBarConcertina = () => {
+
+    // Class name we will use for expansion
+    const expanded = "expanded";
+
+    // Start with the first section expanded
+    const headings = document.getElementById("nav").getElementsByTagName("h1");
+    headings[0].classList.add(expanded);
+
+    // Utility function to remove expanded from all headings
+    const removeCurrentExpanded = () => {
+        [...headings].forEach(heading => {
+            if (heading.classList.contains(expanded)) {
+                heading.classList.remove(expanded);
+            }
+        });
+    };
+
+    // Event handler for clicking on a heading
+    const handleClick = heading => {
+        return () => {
+            removeCurrentExpanded();
+            heading.classList.add(expanded);
+        };
+    };
+
+    // Make all headings clickable
+    [...headings].forEach(heading => heading.addEventListener("click", handleClick(heading)));
 };
 
 /**
@@ -120,21 +155,25 @@ const setPageTitle = () => {
 };
 
 /**
- * Add a 'highlighted' class to any section which has a <strong> tag inside its
- * <h2> tag (i.e. is ## __something__ in the markdown)
+ * Add icons into the nav bar
+ *
+ * Convert <em>some-icon-name</em> into <i class="las la-some-icon-name"></i>
  */
-const highlightSections = () => {
+const addNavBarIcons = () => {
 
-    [...document.getElementsByTagName("section")].forEach(section => {
+    const iconTags = [...document.getElementById("nav").getElementsByTagName("em")];
+    iconTags.forEach(iconTag => {
 
-        const h2 = [...section.getElementsByTagName("h2")];
-        if (h2.length > 0) {
+        // Create our icon
+        const icon = document.createElement("i");
+        icon.classList.add("las");
+        icon.classList.add("la-" + iconTag.textContent);
 
-            if ([...h2[0].getElementsByTagName("strong")].length > 0) {
+        // Add in the icon where our original tag is
+        iconTag.after(icon);
 
-                section.classList.add("highlighted");
-            }
-        }
+        // Remove the original tag
+        iconTag.parentNode.removeChild(iconTag);
     });
 };
 
@@ -189,10 +228,13 @@ const tidyInputElements = () => {
 addEventListener("load", () => {
 
     // Handle conversion
-    addNavBar();
+    const hasNavBar = addNavBar();
     convertMarkdown();
     setPageTitle();
-    highlightSections();
+    if (hasNavBar) {
+        addNavBarConcertina();
+        addNavBarIcons();
+    }
     taskItemsWaiting();
     tidyInputElements();
 
