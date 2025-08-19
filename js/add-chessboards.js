@@ -397,17 +397,17 @@ const updateChessboard = (moves, link) => {
             moves = moves + "," + additionalMoves;
         }
 
-        // Find the section this link is in
-        let section = link;
-        while (section.localName && section.localName !== "section") {
-            section = section.parentNode;
+        // Find the container this link is in
+        let container = link;
+        while (!container.classList.contains("chessboard-container")) {
+            container = container.parentNode;
         }
 
         // Check we found a section
-        if (section.localName && section.localName === "section") {
+        if (container.classList.contains("chessboard-container")) {
 
             // Now find the chessboard
-            const board = section.getElementsByClassName("chessboard")[0];
+            const board = container.getElementsByClassName("chessboard")[0];
             if (board && board.chessboard) {
 
                 // Store each of the moves
