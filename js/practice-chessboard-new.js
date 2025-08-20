@@ -259,7 +259,7 @@ alert("White TBD");
 /**
  * Initialise everything
  */
-const init = lines => {
+const initPractice = lines => {
 
     // Randomise the lines
     const randomised = lines.reduce(result => {

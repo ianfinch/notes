@@ -442,9 +442,10 @@ const getSiblings = pre => {
 };
 
 /**
- * Set up any chessboards, based on <PRE> ... </PRE> tags
+ * Create a two column layout, where the left column is a chessboard (from a
+ * <PRE> block) and the right hand column is any content that comes after the <PRE> block
  */
-const initChessboards = () => {
+const twoColumnLayout = () => {
 
     [...document.getElementById("content").getElementsByTagName("pre")].forEach(pre => {
 
@@ -459,7 +460,7 @@ const initChessboards = () => {
                 chessContent.append(elem);
             });
 
-            // Create a div for the board, and add it to the container
+            // Create a div for the board
             const board = document.createElement("div");
             board.id = "board-" + boardNumber;
             board.classList.add("chessboard");
@@ -471,6 +472,28 @@ const initChessboards = () => {
             pre.after(container);
             container.appendChild(board);
             container.appendChild(chessContent);
+
+            // Now we move the pre block into the board div (need to do it
+            // here, because we were using the pre block previously to
+            // permission our container for the board
+            board.appendChild(pre);
+        }
+    });
+};
+
+/**
+ * Set up any chessboards, find any divs which have a class of chessboard, and
+ * replace the PRE block in them with a chessboard
+ */
+const initChessboards = () => {
+
+    [...document.getElementsByClassName("chessboard")].forEach(board => {
+
+        const preBlocks = [...board.getElementsByTagName("pre")];
+        if (preBlocks.length) {
+
+            // Assume we only have one pre block (or only care about the first)
+            const pre = preBlocks[0];
 
             // The content of the pre block is the FEN string
             // ChessboardJs only wants the first part of this
@@ -539,7 +562,8 @@ const initChessboardLinks = () => {
  */
 addEventListener("markdownConverted", () => {
 
-    initChessboards();
+    twoColumnLayout();
     initChessboardLinks();
+    initChessboards();
     window.dispatchEvent(new Event("chessboardConverted"));
 });
