@@ -1,10 +1,30 @@
 /**
+ * Get the notes for the practice
+ */
+const getNotesArea = () => {
+
+    // If we already have a notes area, return that
+    id = "notes-area";
+    const existing = document.getElementById(id);
+    if (existing) {
+
+        return existing;
+    }
+
+    // If we don't, then create a new one and return that
+    const result = document.createElement("div");
+    result.setAttribute("id", id);
+    document.getElementById("notes").after(result);
+    return result;
+};
+
+/**
  * Add a move to the notes section
  */
 const addLine = text => {
 
     const div = document.createElement("div");
-    const notes = document.getElementsByTagName("section")[0];
+    const notes = getNotesArea();
     const n = [...notes.children].filter(x => x.tagName === "DIV").length + 1;
     div.textContent = n + ". " + text;
     notes.appendChild(div);
@@ -17,7 +37,7 @@ const addText = text => {
 
     const div = document.createElement("div");
     const strong = document.createElement("strong");
-    const notes = document.getElementsByTagName("section")[0];
+    const notes = getNotesArea();
     strong.textContent = text;
     div.appendChild(strong);
     notes.appendChild(div);
@@ -28,7 +48,7 @@ const addText = text => {
  */
 const addToLastLine = text => {
 
-    const notes = document.getElementsByTagName("section")[0];
+    const notes = getNotesArea();
     const lastDiv = [...notes.getElementsByTagName("div")].slice(-1)[0];
     lastDiv.textContent = lastDiv.textContent + text;
 };
@@ -60,12 +80,12 @@ const playAgainButton = moves => {
     button.addEventListener("click", e => {
 
         // Clear the previous commentary
-        const section = document.getElementsByTagName("section")[0];
-        [...section.children].forEach(elem => {
+        const notes = getNotesArea();
+        [...notes.children].forEach(elem => {
 
             if (elem.nodeName === "DIV" || elem.nodeName === "BUTTON") {
 
-                section.removeChild(elem);
+                notes.removeChild(elem);
             }
         });
 
@@ -81,7 +101,7 @@ const playAgainButton = moves => {
  */
 const addPlayAgainButton = moves => {
 
-    const notes = document.getElementsByTagName("section")[0];
+    const notes = getNotesArea();
     notes.appendChild(playAgainButton(moves));
 };
 

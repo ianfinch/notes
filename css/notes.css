@@ -11,6 +11,7 @@
     --default-warning-fg:#9c5700;
     --default-failure-bg: #ffc7ce;
     --default-failure-fg:#9c0006;
+    --chessboard-size: 600px;
 }
 
 /* CSS reset */
@@ -101,7 +102,7 @@ div#container {
 }
 
 div#nav {
-    background: darkcyan;
+    background: darkslateblue;
     color: white;
     padding: 8px;
 }
@@ -128,12 +129,12 @@ div#nav ul {
 }
 
 div#nav h1 {
-    color: mediumturquoise;
+    color: cornflowerblue;
     cursor: pointer;
 }
 
 div#nav h1:hover {
-    color: #ffff00;
+    color: goldenrod;
     text-decoration: underline;
 }
 
@@ -196,11 +197,10 @@ table tfoot td {
 
 /* Style any chessboards */
 .chessboard {
-    width: 240px;
     display: inline-block;
     vertical-align: top;
     margin-bottom: 32px;
-    flex: 0 0 240px;
+    flex: 0 0 var(--chessboard-size);
 }
 
 .chessboard-container {
