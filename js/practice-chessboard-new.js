@@ -266,8 +266,7 @@ const startGame = lines => {
     // If we are playing as white, set up the handler for white's initial move
     if (chessboardDiv.chessboard.orientation() === "white") {
 
-alert("White TBD");
-//        chessboardDiv.dropHandler = pieceMovedHandler(moveTree, []);
+        chessboardDiv.dropHandler = pieceMovedHandler(lines);
 
     // If we are playing as black, pick one of white's possible moves to start
     } else {

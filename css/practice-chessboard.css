@@ -185,23 +185,8 @@ div.tags + #content {
     padding-top: 8px;
 }
 
-/* Control layout from the main container */
-.contains-chessboard {
-    display: flex;
-    flex-direction: row-reverse;
-    width: 968px;
-}
-
-.contains-chessboard .section-content {
-    width: 360px;
-    margin-left: 8px;
-}
-
-.contains-chessboard .section-content section > div {
-    margin-bottom: 2px;
-}
-
-.contains-chessboard .section-content section > button {
+/* Style buttons for the practive chessboard */
+#notes-area button {
     cursor: pointer;
     background: dodgerblue;
     color: white;
@@ -210,7 +195,7 @@ div.tags + #content {
     padding: 4px 8px;
 }
 
-.contains-chessboard .section-content section > button:hover {
+.#notes-area button:hover {
     background: royalblue;
 }
 

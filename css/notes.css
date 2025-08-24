@@ -102,7 +102,7 @@ div#container {
 }
 
 div#nav {
-    background: darkslateblue;
+    background: cadetblue;
     color: white;
     padding: 8px;
 }
@@ -129,7 +129,7 @@ div#nav ul {
 }
 
 div#nav h1 {
-    color: cornflowerblue;
+    color: darkslategray;
     cursor: pointer;
 }
 
