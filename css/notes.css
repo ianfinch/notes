@@ -245,6 +245,7 @@ footer {
 }
 
 /* Tables */
+/*
 .bookmarks table {
   border-collapse: collapse;
 }
@@ -271,6 +272,41 @@ footer {
   font-weight: bold;
 }
 .bookmarks table tfoot td {
+}
+*/
+
+/* Bookmarks - a box with an icon and a link */
+.bookmark {
+    display: inline-flex;
+    gap: 8px;
+    background: lemonchiffon;
+    width: 160px;
+    height: 32px;
+    border-radius: 8px;
+}
+
+.bookmark img {
+    display: block;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px 0 0 8px;
+}
+
+.bookmark i.las {
+    display: block;
+    width: 32px;
+    height: 32px;
+    font-size: 24px;
+    line-height: 32px;
+    text-align: center;
+    background: gold;
+    border-radius: 8px 0 0 8px;
+}
+
+.bookmark a {
+    display: block;
+    font-size: 16px;
+    line-height: 32px;
 }
 
 /* Checkboxes */
