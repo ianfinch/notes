@@ -121,6 +121,9 @@ const convertMarkdownElement = mdElem => {
     // Actually do the markdown to HTML conversion
     var html = converter.makeHtml(md);
 
+    // Convert dashes
+    html = html.replace(/--/g, "–");
+
     // Add the generated HTML to the page and hide the markdown
     mdElem.insertAdjacentHTML("beforebegin", html);
     mdElem.style.display = "none";

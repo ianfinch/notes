@@ -1,0 +1,160 @@
+/* Variables */
+:root {
+    --page-width: 210mm;
+    --page-height: 297mm;
+    --side-padding: 10mm;
+    --top-padding: 10mm;
+    --bottom-padding: 25mm;
+    --heading-colour: blueviolet;
+}
+
+/* Make screen display look a bit more like print */
+@media screen {
+
+    body {
+        background: #999;
+    }
+}
+
+/* CSS reset */
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p,
+blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img,
+ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i,
+center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption,
+tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section,
+summary, time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav,
+section {
+  display: block;
+}
+
+/* Reset any floats */
+.reset {
+  clear: both;
+}
+
+/* Use border box */
+* {
+    box-sizing: border-box;
+}
+
+/* Style standard elements */
+body {
+    font-family: 'Roboto', sans-serif;
+    font-size: 14px;
+}
+h1, h2, h3, h4 {
+  font-weight: bold;
+  margin-bottom: 0.5em;
+}
+h1 {
+  font-size: 36px;
+}
+h2 {
+  font-size: 22px;
+}
+h3 {
+  font-size: 16px;
+}
+p {
+  margin-bottom: 0.5em;
+}
+em,
+i {
+  font-style: italic;
+}
+strong, b {
+  font-weight: bold;
+}
+code {
+  font-family: courier;
+}
+pre {
+  margin-bottom: 1em;
+  margin-left: 3em;
+  margin-right: 6em;
+  background: #ccc;
+  padding: 0.5em 1em;
+}
+ul, ol {
+  margin-left: 3em;
+  margin-bottom: 0.5em;
+}
+ul > ul, ol > ol, ul > ol, ol > ul {
+  margin-top: 0.2em;
+}
+a {
+  text-decoration: none;
+  color: #0000ff;
+  cursor: pointer;
+}
+a:hover {
+  color: #cc0000;
+  text-decoration: underline;
+}
+
+/* The content area */
+div#content {
+}
+
+/* Set page size */
+.page {
+    background: white;
+    color: #000;
+    width: var(--page-width);
+    min-height: var(--page-height);
+    padding-left: var(--side-padding);
+    padding-right: var(--side-padding);
+    margin: 0 auto;
+}
+
+/* Add heading to continuation pages */
+div#content .page:first-child > *:first-child::before {
+    display: none;
+}
+
+div#content .page > *:first-child::before {
+    content: "Ian Finch";
+    display: block;
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
+    margin-bottom: 1em;
+}
+
+/* Add colour to the header section */
+div#content h1, div#content h1 + ul, .page > *:first-child::before {
+    background: var(--heading-colour);
+    color: white;
+    margin: 0 calc(-1 * var(--side-padding));
+    padding: 0 var(--side-padding);
+}
+
+div#content h1 {
+    padding-top: var(--top-padding);
+    padding-bottom: 0.5em;
+}
+
+div#content h1 + ul {
+    padding-bottom: var(--top-padding);
+    list-style-type: none;
+}
+
+div#content h1 + ul li:first-child {
+    font-size: 22px;
+    font-weight: bold;
+    padding-bottom: 0.5em;
+}
+
+/* Layout for sections */
+div#content h2 {
+    margin-top: var(--top-padding);
+    color: var(--heading-colour);
+}
