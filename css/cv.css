@@ -5,7 +5,7 @@
     --side-padding: 10mm;
     --top-padding: 10mm;
     --bottom-padding: 25mm;
-    --heading-colour: blueviolet;
+    --heading-colour: darkslateblue;
 }
 
 /* Make screen display look a bit more like print */
@@ -13,6 +13,16 @@
 
     body {
         background: #999;
+        padding-bottom: 20px !important;
+    }
+
+    .page::before {
+        content: "";
+        min-height: 20px;
+        display: block;
+        background: #999;
+        margin-left: calc(-1 * var(--side-padding));
+        margin-right: calc(-1 * var(--side-padding));
     }
 }
 
