@@ -28,7 +28,8 @@ addConfig = notation => {
  */
 const stepsToTranspose = (newKey, visual) => {
 
-    const oldKey = visual[0].getKeySignature().root;
+    const keySig = visual[0].getKeySignature();
+    const oldKey = keySig.root + keySig.acc;
     const steps = {
         "C":  0,
         "C#": 1,
