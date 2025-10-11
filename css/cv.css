@@ -54,3 +54,8 @@ div#content h2 {
     margin-top: var(--top-padding);
     color: var(--heading-colour);
 }
+
+/* Dates are in italics in h3, so take them out of bold */
+div#content h3 > em {
+    font-weight: normal;
+}
