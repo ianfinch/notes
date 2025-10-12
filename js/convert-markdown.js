@@ -162,21 +162,39 @@ const setPageTitle = () => {
  *
  * Convert <em>some-icon-name</em> into <i class="las la-some-icon-name"></i>
  */
-const addNavBarIcons = () => {
+const addLineAwesomeIcons = () => {
 
-    const iconTags = [...document.getElementById("nav").getElementsByTagName("em")];
+    const iconTags = [...document.getElementsByTagName("em")];
     iconTags.forEach(iconTag => {
 
-        // Create our icon
-        const icon = document.createElement("i");
-        icon.classList.add("las");
-        icon.classList.add("la-" + iconTag.textContent);
+        // Somewhere to build our icon
+        let icon = null;
+        const iconName = iconTag.textContent;
 
-        // Add in the icon where our original tag is
-        iconTag.after(icon);
+        // Line awesome icons
+        if (iconName.match(/^la:/)) {
 
-        // Remove the original tag
-        iconTag.parentNode.removeChild(iconTag);
+            icon = document.createElement("i");
+            icon.classList.add("las");
+            icon.classList.add("la-" + iconName.replace(/^la:/, ""));
+        }
+
+        // Icons defined in CSS
+        if (iconName.match(/^css:/)) {
+
+            icon = document.createElement("i");
+            icon.classList.add("css-icon-" + iconName.replace(/^css:/, ""));
+        }
+
+        // Check whether we got an icon (or was it just normal italic text)
+        if (icon) {
+
+            // Add in the icon where our original tag is
+            iconTag.after(icon);
+
+            // Remove the original tag
+            iconTag.parentNode.removeChild(iconTag);
+        }
     });
 };
 
@@ -234,9 +252,9 @@ addEventListener("load", () => {
     const hasNavBar = addNavBar();
     convertMarkdown();
     setPageTitle();
+    addLineAwesomeIcons();
     if (hasNavBar) {
         addNavBarConcertina();
-        addNavBarIcons();
     }
     taskItemsWaiting();
     tidyInputElements();
