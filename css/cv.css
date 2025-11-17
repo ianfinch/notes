@@ -3,6 +3,8 @@
     --side-padding: 10mm;
     --top-padding: 10mm;
     --bottom-padding: 25mm;
+    --heading-margin-top: 5mm;
+    --subheading-margin-top: 0;
     --heading-colour: darkslateblue;
 }
 
@@ -52,8 +54,16 @@ div#content h1 + h2 + p {
 
 /* Layout for sections */
 div#content h2 {
-    margin-top: var(--top-padding);
+    margin-top: var(--heading-margin-top);
     color: var(--heading-colour);
+}
+
+div#content h3 {
+    margin-top: var(--heading-margin-top);
+}
+
+div#content h2 + h3, div#content h3 + h3 {
+    margin-top: var(--subheading-margin-top);
 }
 
 /* Dates are in italics in h3, so take them out of bold */
