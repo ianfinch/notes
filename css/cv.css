@@ -71,6 +71,12 @@ div#content h3 > em {
     font-weight: normal;
 }
 
+/* Remove indent from lists at the top level */
+div#content h3 + ul {
+    margin-left: 1em;
+    margin-bottom: 1em;
+}
+
 /* Icons */
 i[class^="css-icon-"] {
     display: inline-block;
